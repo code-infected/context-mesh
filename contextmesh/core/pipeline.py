@@ -117,6 +117,7 @@ class CompressionPipeline:
         self.extractor = extractor or BudgetExtractor(ExtractorConfig())
         self.validator = validator or CoherenceChecker()
         self.tokenizer = TokenCounter.get_default()
+        self._chunk_store: dict[str, Chunk] = {}
 
     def compress(self, inp: CompressionInput) -> CompressionOutput:
         """Compress tool output under token budget.
@@ -293,6 +294,7 @@ class CompressionPipeline:
         Returns:
             DependencyGraph with all chunks added.
         """
+        self._chunk_store = {c.id: c for c in chunks}
         graph = DependencyGraph()
         for chunk in chunks:
             graph.add_chunk(chunk)
@@ -301,16 +303,14 @@ class CompressionPipeline:
     def _get_token_count(self, chunk_id: str) -> int:
         """Get token count for a chunk ID.
 
-        This is a simple lookup. In production, this would
-        use the chunk store to look up actual token counts.
-
         Args:
             chunk_id: Chunk ID.
 
         Returns:
-            Token count (0 as fallback).
+            Token count from the chunk store.
         """
-        return 0
+        chunk = self._chunk_store.get(chunk_id)
+        return chunk.token_count if chunk else 0
 
     def _reconstruct_output(self, chunks: list[Chunk]) -> str:
         """Reconstruct compressed output from chunks.

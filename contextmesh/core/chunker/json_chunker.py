@@ -11,7 +11,7 @@ Architecture:
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, ClassVar
 
 from contextmesh.core.chunker.base import (
     Chunk,

@@ -22,7 +22,7 @@ import re
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, ClassVar
 
-from tree_sitter_languages import get_parser
+from tree_sitter import Language, Parser
 
 from contextmesh.core.chunker.base import (
     Chunk,
@@ -34,8 +34,7 @@ from contextmesh.core.chunker.base import (
 from contextmesh.core.tokenizer import TokenCounter
 
 if TYPE_CHECKING:
-    from tree_sitter import Language, ParsedLine, Tree
-    from tree_sitter_languages import LanguageParser
+    from tree_sitter import Node, Tree
 
 
 LANGUAGE_EXTENSIONS: dict[str, str] = {
@@ -126,7 +125,15 @@ class CodeChunker(ChunkerBase):
 
         self.language = language
         self.config = config or CodeChunkConfig()
-        self._parser: LanguageParser = get_parser(language)
+        self._parser = Parser()
+        try:
+            lang_module = __import__(f"tree_sitter_{language}")
+            self._parser.language = getattr(lang_module, f"language_{language}")()
+        except (ModuleNotFoundError, AttributeError) as e:
+            raise ChunkerError(
+                f"Failed to load tree-sitter language '{language}': {e}",
+                format=self.format,
+            ) from e
         self._tokenizer = TokenCounter.get_default()
 
     def chunk(self, content: str) -> list[Chunk]:
@@ -151,8 +158,8 @@ class CodeChunker(ChunkerBase):
         if not tree.root_node:
             raise ChunkerError(f"Empty parse tree for {self.language}", format=self.format)
 
-        visitor = _CodeChunkVisitor(content, self._tokenizer, self.config)
-        chunks = visitor.visit(tree)
+        visitor = _CodeChunkVisitor(content, tree.root_node, self._tokenizer, self.config)
+        chunks = visitor.visit()
 
         return self._post_process(chunks, content)
 
@@ -261,9 +268,12 @@ class _CodeChunkVisitor:
     differences between language AST structures.
     """
 
-    def __init__(self, content: str, tokenizer: TokenCounter, config: CodeChunkConfig) -> None:
+    def __init__(
+        self, content: str, root_node: Node, tokenizer: TokenCounter, config: CodeChunkConfig
+    ) -> None:
         self.content = content
         self.lines = content.split("\n")
+        self.root_node = root_node
         self.tokenizer = tokenizer
         self.config = config
         self.chunks: list[Chunk] = []
@@ -272,21 +282,18 @@ class _CodeChunkVisitor:
         self._in_function = False
         self._in_class = False
 
-    def visit(self, tree: Tree) -> list[Chunk]:
+    def visit(self) -> list[Chunk]:
         """Walk the AST and extract chunks.
-
-        Args:
-            tree: Parsed tree-sitter tree.
 
         Returns:
             List of extracted chunks.
         """
-        self._visit_node(tree.root_node)
+        self._visit_node(self.root_node)
         self._flush_import_buffer()
         self._flush_docstring_buffer()
         return self.chunks
 
-    def _visit_node(self, node: ParsedLine) -> None:
+    def _visit_node(self, node: Node) -> None:
         """Recursively visit AST nodes.
 
         Args:
@@ -326,7 +333,7 @@ class _CodeChunkVisitor:
             for child in node.children:
                 self._visit_node(child)
 
-    def _visit_function(self, node: ParsedLine) -> None:
+    def _visit_function(self, node: Node) -> None:
         """Extract a function definition as a chunk.
 
         Args:
@@ -361,7 +368,7 @@ class _CodeChunkVisitor:
             )
         )
 
-    def _visit_class(self, node: ParsedLine) -> None:
+    def _visit_class(self, node: Node) -> None:
         """Extract a class definition as a chunk.
 
         Args:
@@ -396,7 +403,7 @@ class _CodeChunkVisitor:
             )
         )
 
-    def _get_function_name(self, node: ParsedLine) -> str:
+    def _get_function_name(self, node: Node) -> str:
         """Extract function name from AST node.
 
         Args:
@@ -411,7 +418,7 @@ class _CodeChunkVisitor:
                 return self.content[name_node.start_byte:name_node.end_byte]
         return "anonymous"
 
-    def _get_class_name(self, node: ParsedLine) -> str:
+    def _get_class_name(self, node: Node) -> str:
         """Extract class name from AST node.
 
         Args:
@@ -426,7 +433,7 @@ class _CodeChunkVisitor:
                 return self.content[name_node.start_byte:name_node.end_byte]
         return "AnonymousClass"
 
-    def _get_leading_comments(self, node: ParsedLine) -> str:
+    def _get_leading_comments(self, node: Node) -> str:
         """Get comments preceding a node.
 
         Args:
@@ -454,7 +461,7 @@ class _CodeChunkVisitor:
 
         return "\n".join(comments)
 
-    def _extract_module_docstring(self, node: ParsedLine) -> str | None:
+    def _extract_module_docstring(self, node: Node) -> str | None:
         """Extract module-level docstring.
 
         Args:

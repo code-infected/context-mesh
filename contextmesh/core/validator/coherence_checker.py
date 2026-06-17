@@ -262,7 +262,7 @@ class CoherenceChecker:
                 continue
 
             component = chunk.metadata.get("component")
-            level = chunk.metadata.get("level")
+            has_context = False
 
             for j in range(i - 1, -1, -1):
                 prev = sorted_chunks[j]
@@ -270,12 +270,13 @@ class CoherenceChecker:
                 prev_level = prev.metadata.get("level")
 
                 if component == prev_component and prev_level == "INFO":
+                    has_context = True
                     break
 
                 if prev.start_pos < chunk.start_pos - 1000:
                     break
 
-            else:
-                pass
+            if not has_context:
+                violations_fixed += 1
 
         return violations_fixed == 0, fixed_chunks, violations_fixed

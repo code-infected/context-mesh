@@ -8,9 +8,10 @@ interface Config {
   toolBudgets: ToolBudgetConfig;
   sessionTimeoutMinutes: number;
   logLevel: string;
+  budgetForTool: (toolName: string) => number;
 }
 
-const DEFAULT_CONFIG: Config = {
+const DEFAULT_CONFIG: Omit<Config, "budgetForTool"> = {
   defaultBudgetTokens: 8000,
   maxOverheadMs: 80,
   toolBudgets: {
@@ -24,7 +25,7 @@ const DEFAULT_CONFIG: Config = {
   logLevel: "info",
 };
 
-function loadConfigFromEnv(): Config {
+function loadConfigFromEnv(): Omit<Config, "budgetForTool"> {
   return {
     defaultBudgetTokens: parseInt(process.env.CONTEXTMESH_DEFAULT_BUDGET_TOKENS || "") || DEFAULT_CONFIG.defaultBudgetTokens,
     maxOverheadMs: parseInt(process.env.CONTEXTMESH_MAX_OVERHEAD_MS || "") || DEFAULT_CONFIG.maxOverheadMs,
@@ -34,8 +35,11 @@ function loadConfigFromEnv(): Config {
   };
 }
 
-export const config: Config = loadConfigFromEnv();
+const baseConfig = loadConfigFromEnv();
 
-config.budgetForTool = function(toolName: string): number {
-  return config.toolBudgets[toolName] || config.defaultBudgetTokens;
+export const config: Config = {
+  ...baseConfig,
+  budgetForTool: (toolName: string): number => {
+    return baseConfig.toolBudgets[toolName] || baseConfig.defaultBudgetTokens;
+  },
 };
