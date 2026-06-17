@@ -1,92 +1,202 @@
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { StreamableSSEServerTransport } from "@modelcontextprotocol/sdk/server/streamable-sse.js";
-import { compressionClient } from "./compression_client.js";
-import { sessionManager } from "./session_manager.js";
+import { Server } from "@modelcontextprotocol/sdk/server/index.js";
+import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import {
+  CallToolRequestSchema,
+  ListToolsRequestSchema,
+  Tool,
+} from "@modelcontextprotocol/sdk/types.js";
+import { CompressionClient } from "./compression_client.js";
+import { SessionManager } from "./session_manager.js";
 import { config } from "./config.js";
 
-export interface ContextMeshProxyOptions {
-  upstreamUrl: string;
-  port?: number;
+interface UpstreamConfig {
+  url: string;
+  name: string;
+}
+
+interface ContextMeshProxyOptions {
+  upstream: UpstreamConfig;
   grpcHost?: string;
   grpcPort?: number;
+  port?: number;
 }
 
-export class ContextMeshProxy {
-  private server: McpServer;
-  private upstreamUrl: string;
+class ContextMeshProxy {
+  private server: Server;
+  private compressionClient: CompressionClient;
+  private sessionManager: SessionManager;
+  private upstream: UpstreamConfig;
 
   constructor(options: ContextMeshProxyOptions) {
-    this.upstreamUrl = options.upstreamUrl;
-    this.server = new McpServer({
-      name: "contextmesh-proxy",
-      version: "0.1.0",
-    });
+    this.upstream = options.upstream;
+    this.compressionClient = new CompressionClient(
+      options.grpcHost || "localhost",
+      options.grpcPort || 50051
+    );
+    this.sessionManager = new SessionManager();
 
-    this.setupToolHandlers();
-  }
-
-  private setupToolHandlers() {
-    this.server.tool(
-      "call_tool",
-      async (args: { name: string; arguments: Record<string, unknown> }) => {
-        const toolName = args.name;
-        const toolArgs = args.arguments;
-
-        const rawResult = await this.forwardToUpstream(toolName, toolArgs);
-
-        const session = sessionManager.getCurrentSession();
-        const taskContext = session?.getTaskContext();
-
-        if (!taskContext || !rawResult.content) {
-          return rawResult;
-        }
-
-        try {
-          const compressed = await compressionClient.compress({
-            toolName,
-            rawOutput: rawResult.content,
-            taskContext,
-            budget: config.budgetForTool(toolName),
-          });
-
-          return {
-            ...rawResult,
-            content: compressed.compressed_output,
-            _contextmesh: {
-              original_tokens: compressed.original_tokens,
-              compressed_tokens: compressed.compressed_tokens,
-              compression_ratio: compressed.compression_ratio,
-              chunks_selected: compressed.chunks_selected,
-              chunks_total: compressed.chunks_total,
-            },
-          };
-        } catch (error) {
-          console.error("Compression failed, returning raw result:", error);
-          return rawResult;
-        }
+    this.server = new Server(
+      {
+        name: "contextmesh-proxy",
+        version: "0.1.0",
+      },
+      {
+        capabilities: {
+          tools: {},
+        },
       }
     );
+
+    this.setupHandlers();
   }
 
-  private async forwardToUpstream(
-    toolName: string,
-    args: Record<string, unknown>
-  ): Promise<{ content: string; isError?: boolean }> {
-    const response = await fetch(this.upstreamUrl, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ method: "tools/call", params: { name: toolName, arguments: args } }),
+  private setupHandlers() {
+    this.server.setRequestHandler(ListToolsRequestSchema, async () => {
+      return {
+        tools: [
+          {
+            name: "compress",
+            description: "Compress tool output using ContextMesh",
+            inputSchema: {
+              type: "object",
+              properties: {
+                tool_name: { type: "string" },
+                raw_output: { type: "string" },
+                task_description: { type: "string" },
+                budget_tokens: { type: "number" },
+              },
+              required: ["tool_name", "raw_output", "task_description"],
+            },
+          },
+        ],
+      };
     });
 
-    const data = await response.json();
-    return { content: data.result?.content?.[0]?.text || "", isError: data.error };
+    this.server.setRequestHandler(CallToolRequestSchema, async (request) => {
+      if (request.params.name === "compress") {
+        const args = request.params.arguments as Record<string, unknown>;
+        return this.handleCompress(args);
+      }
+
+      return {
+        content: [
+          {
+            type: "text",
+            text: `Unknown tool: ${request.params.name}`,
+          },
+        ],
+        isError: true,
+      };
+    });
   }
 
-  async start(port: number = 8081) {
-    const transport = new StreamableSSEServerTransport();
+  private async handleCompress(args: Record<string, unknown>) {
+    const toolName = args.tool_name as string;
+    const rawOutput = args.raw_output as string;
+    const taskDescription = args.task_description as string;
+    const budgetTokens = (args.budget_tokens as number) || config.budgetForTool(toolName);
+
+    const sessionId = this.sessionManager.getOrCreateSession(taskDescription);
+    const taskContext = this.sessionManager.getTaskContext(sessionId);
+
+    if (!taskContext) {
+      return {
+        content: [
+          {
+            type: "text",
+            text: "Failed to create session context",
+          },
+        ],
+        isError: true,
+      };
+    }
+
+    try {
+      const compressed = await this.compressionClient.compress({
+        sessionId,
+        taskId: `task-${Date.now()}`,
+        toolName,
+        rawOutput,
+        taskDescription: taskContext.taskDescription,
+        budget: budgetTokens,
+        toolArgs: {},
+        recentSteps: taskContext.recentSteps,
+      });
+
+      return {
+        content: [
+          {
+            type: "text",
+            text: compressed.compressed_output,
+          },
+        ],
+        metadata: {
+          original_tokens: compressed.original_tokens,
+          compressed_tokens: compressed.compressed_tokens,
+          compression_ratio: compressed.compression_ratio,
+          chunks_selected: compressed.chunks_selected,
+          chunks_total: compressed.chunks_total,
+        },
+      };
+    } catch (error) {
+      console.error("Compression failed, returning raw output:", error);
+      return {
+        content: [
+          {
+            type: "text",
+            text: rawOutput,
+          },
+        ],
+        metadata: {
+          compression_failed: true,
+          original_tokens: rawOutput.length / 4,
+        },
+      };
+    }
+  }
+
+  async start() {
+    const transport = new StdioServerTransport();
     await this.server.connect(transport);
-    console.log(`ContextMesh proxy started on port ${port}`);
+    console.error("ContextMesh proxy started via stdio");
+  }
+
+  async shutdown() {
+    this.compressionClient.close();
+    await this.server.close();
   }
 }
 
-export default ContextMeshProxy;
+async function main() {
+  const upstreamUrl = process.env.CONTEXTMESH_UPSTREAM || "http://localhost:8080";
+  const grpcHost = process.env.CONTEXTMESH_GRPC_HOST || "localhost";
+  const grpcPort = parseInt(process.env.CONTEXTMESH_GRPC_PORT || "50051");
+
+  const proxy = new ContextMeshProxy({
+    upstream: {
+      url: upstreamUrl,
+      name: "upstream",
+    },
+    grpcHost,
+    grpcPort,
+  });
+
+  process.on("SIGINT", async () => {
+    await proxy.shutdown();
+    process.exit(0);
+  });
+
+  process.on("SIGTERM", async () => {
+    await proxy.shutdown();
+    process.exit(0);
+  });
+
+  await proxy.start();
+}
+
+main().catch((error) => {
+  console.error("Failed to start proxy:", error);
+  process.exit(1);
+});
+
+export { ContextMeshProxy };

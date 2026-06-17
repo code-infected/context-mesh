@@ -1,43 +1,75 @@
-import { CompressionClient } from "./compression_client.js";
+import { randomUUID } from "crypto";
 
 interface SessionData {
   sessionId: string;
   taskDescription: string;
   recentSteps: string[];
   createdAt: Date;
+  lastAccessedAt: Date;
 }
 
-class SessionManager {
+interface TaskContext {
+  taskDescription: string;
+  recentSteps: string[];
+}
+
+export class SessionManager {
   private sessions: Map<string, SessionData> = new Map();
   private currentSessionId: string | null = null;
+  private sessionTimeoutMs: number;
 
-  createSession(sessionId: string, taskDescription: string): SessionData {
+  constructor(sessionTimeoutMinutes: number = 60) {
+    this.sessionTimeoutMs = sessionTimeoutMinutes * 60 * 1000;
+  }
+
+  createSession(taskDescription: string): string {
+    const sessionId = randomUUID();
+    const now = new Date();
+
     const session: SessionData = {
       sessionId,
       taskDescription,
       recentSteps: [],
-      createdAt: new Date(),
+      createdAt: now,
+      lastAccessedAt: now,
     };
+
     this.sessions.set(sessionId, session);
     this.currentSessionId = sessionId;
-    return session;
+    return sessionId;
+  }
+
+  getOrCreateSession(taskDescription: string): string {
+    if (this.currentSessionId && this.sessions.has(this.currentSessionId)) {
+      const session = this.sessions.get(this.currentSessionId)!;
+      session.lastAccessedAt = new Date();
+      return session.sessionId;
+    }
+
+    return this.createSession(taskDescription);
   }
 
   getSession(sessionId: string): SessionData | undefined {
-    return this.sessions.get(sessionId);
+    const session = this.sessions.get(sessionId);
+    if (session) {
+      session.lastAccessedAt = new Date();
+    }
+    return session;
   }
 
   getCurrentSession(): SessionData | undefined {
     if (this.currentSessionId) {
-      return this.sessions.get(this.currentSessionId);
+      return this.getSession(this.currentSessionId);
     }
     return undefined;
   }
 
-  setCurrentSession(sessionId: string) {
+  setCurrentSession(sessionId: string): boolean {
     if (this.sessions.has(sessionId)) {
       this.currentSessionId = sessionId;
+      return true;
     }
+    return false;
   }
 
   addRecentStep(sessionId: string, step: string): void {
@@ -47,25 +79,29 @@ class SessionManager {
       if (session.recentSteps.length > 3) {
         session.recentSteps.shift();
       }
+      session.lastAccessedAt = new Date();
     }
   }
 
-  getTaskContext(sessionId?: string): { taskDescription: string; recentSteps: string[] } | null {
-    const session = sessionId ? this.sessions.get(sessionId) : this.getCurrentSession();
+  getTaskContext(sessionId?: string): TaskContext | null {
+    const session = sessionId
+      ? this.sessions.get(sessionId)
+      : this.getCurrentSession();
+
     if (!session) return null;
 
     return {
       taskDescription: session.taskDescription,
-      recentSteps: session.recentSteps,
+      recentSteps: [...session.recentSteps],
     };
   }
 
-  clearOldSessions(maxAgeMs: number = 3600000): number {
+  clearOldSessions(): number {
     const now = Date.now();
     let cleared = 0;
 
     for (const [id, session] of this.sessions.entries()) {
-      if (now - session.createdAt.getTime() > maxAgeMs) {
+      if (now - session.lastAccessedAt.getTime() > this.sessionTimeoutMs) {
         this.sessions.delete(id);
         cleared++;
       }
@@ -73,6 +109,8 @@ class SessionManager {
 
     return cleared;
   }
-}
 
-export const sessionManager = new SessionManager();
+  getSessionCount(): number {
+    return this.sessions.size;
+  }
+}

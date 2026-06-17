@@ -1,10 +1,12 @@
 import * as grpc from "@grpc/grpc-js";
 import * as protoLoader from "@grpc/proto-loader";
-import path from "path";
+import { join, dirname } from "path";
+import { fileURLToPath } from "url";
 
-const PROTO_PATH = path.join(__dirname, "../proto/compression.proto");
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const PROTO_PATH = join(__dirname, "../proto/compression.proto");
 
-interface CompressRequest {
+export interface CompressRequest {
   session_id: string;
   task_id: string;
   tool_name: string;
@@ -15,7 +17,7 @@ interface CompressRequest {
   budget_tokens: number;
 }
 
-interface CompressResponse {
+export interface CompressResponse {
   compressed_output: string;
   original_tokens: number;
   compressed_tokens: number;
@@ -26,7 +28,11 @@ interface CompressResponse {
   chunk_types_selected: string[];
 }
 
-class CompressionClient {
+export interface HealthResponse {
+  status: string;
+}
+
+export class CompressionClient {
   private client: any;
   private grpcHost: string;
   private grpcPort: number;
@@ -44,7 +50,7 @@ class CompressionClient {
     });
 
     const protoDescriptor = grpc.loadPackageDefinition(packageDefinition);
-    const compressionProto = protoDescriptor.contextmesh as any;
+    const compressionProto = (protoDescriptor as any).contextmesh;
 
     this.client = new compressionProto.CompressionService(
       `${host}:${port}`,
@@ -53,27 +59,28 @@ class CompressionClient {
   }
 
   async compress(request: {
+    sessionId: string;
+    taskId: string;
     toolName: string;
     rawOutput: string;
-    taskContext: { taskDescription: string; recentSteps: string[] };
+    taskDescription: string;
     budget: number;
-    sessionId?: string;
-    taskId?: string;
     toolArgs?: Record<string, unknown>;
+    recentSteps?: string[];
   }): Promise<CompressResponse> {
     const req: CompressRequest = {
-      session_id: request.sessionId || "unknown",
-      task_id: request.taskId || "unknown",
+      session_id: request.sessionId,
+      task_id: request.taskId,
       tool_name: request.toolName,
       tool_args_json: JSON.stringify(request.toolArgs || {}),
       raw_output: request.rawOutput,
-      task_description: request.taskContext.taskDescription,
-      recent_steps: request.taskContext.recentSteps,
+      task_description: request.taskDescription,
+      recent_steps: request.recentSteps || [],
       budget_tokens: request.budget,
     };
 
     return new Promise((resolve, reject) => {
-      this.client.Compress(req, (error: any, response: CompressResponse) => {
+      this.client.Compress(req, (error: grpc.ServiceError | null, response: CompressResponse) => {
         if (error) {
           reject(error);
         } else {
@@ -85,7 +92,7 @@ class CompressionClient {
 
   async healthCheck(): Promise<boolean> {
     return new Promise((resolve) => {
-      this.client.Health({}, (error: any, response: { status: string }) => {
+      this.client.Health({}, (error: grpc.ServiceError | null, response: HealthResponse) => {
         if (error || response?.status !== "healthy") {
           resolve(false);
         } else {
@@ -94,7 +101,8 @@ class CompressionClient {
       });
     });
   }
-}
 
-export const compressionClient = new CompressionClient();
-export { CompressionClient };
+  close(): void {
+    this.client.close();
+  }
+}

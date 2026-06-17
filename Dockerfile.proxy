@@ -1,0 +1,18 @@
+FROM node:20-slim
+
+WORKDIR /app
+
+COPY contextmesh/proxy/mcp_proxy/package.json contextmesh/proxy/mcp_proxy/package.json
+COPY contextmesh/proxy/mcp_proxy/tsconfig.json contextmesh/proxy/mcp_proxy/tsconfig.json
+
+RUN cd contextmesh/proxy/mcp_proxy && npm install
+
+COPY contextmesh/proxy/mcp_proxy/ contextmesh/proxy/mcp_proxy/
+
+RUN cd contextmesh/proxy/mcp_proxy && npm run build
+
+WORKDIR /app/contextmesh/proxy/mcp_proxy
+
+EXPOSE 8081
+
+CMD ["node", "dist/index.js"]
