@@ -1,0 +1,74 @@
+compression:
+  default_budget_tokens: 8000
+  max_overhead_ms: 80
+  min_compression_ratio: 0.3
+
+  tool_budgets:
+    read_file: 6000
+    web_scrape: 4000
+    run_shell: 8000
+    query_database: 5000
+    search_codebase: 6000
+
+scorer:
+  model: "BAAI/bge-small-en-v1.5"
+  cache_size: 10000
+  task_context_window: 3
+
+chunker:
+  code:
+    max_chunk_tokens: 300
+    min_chunk_tokens: 20
+    languages:
+      - python
+      - typescript
+      - javascript
+      - rust
+      - go
+  json:
+    max_depth: 4
+    min_chunk_tokens: 30
+  log:
+    event_window_ms: 100
+    max_lines_per_chunk: 20
+  html:
+    semantic_tags:
+      - article
+      - section
+      - main
+      - aside
+      - nav
+    min_chunk_tokens: 50
+  csv:
+    rows_per_chunk: 50
+    group_by_cardinality_threshold: 20
+  shell:
+    min_lines_per_chunk: 3
+    blank_line_separator: true
+
+extractor:
+  dependency_budget_slack: 0.15
+  max_coherence_iterations: 3
+
+feedback:
+  enabled: true
+  trace_batch_size: 100
+  failure_analysis_delay_minutes: 5
+  min_failures_before_update: 3
+  max_multiplier: 3.0
+  multiplier_decay_days: 30
+
+proxy:
+  port: 8081
+  grpc_compression_port: 50051
+  session_timeout_minutes: 60
+  log_level: "info"
+
+database:
+  url: "postgresql://localhost:5432/contextmesh"
+  pool_size: 10
+  vector_dimension: 384
+
+dashboard:
+  backend_port: 8082
+  frontend_port: 3000

@@ -1,0 +1,196 @@
+"""gRPC server exposing the compression pipeline.
+
+Provides a gRPC interface to the Python compression pipeline,
+allowing the TypeScript MCP proxy to invoke compression over
+high-performance IPC.
+
+Service definition:
+    CompressionService.Compress(CompressionRequest) -> CompressResponse
+    CompressionService.Health(HealthRequest) -> HealthResponse
+
+Performance target: <80ms end-to-end for 100k token inputs
+"""
+
+from __future__ import annotations
+
+import logging
+from concurrent import futures
+from typing import Any
+
+import grpc
+
+from contextmesh.core.chunker.base import CompressionInput
+from contextmesh.core.pipeline import CompressionPipeline
+
+logger = logging.getLogger(__name__)
+
+
+try:
+    import contextmesh.grpc.compression_pb2 as pb2
+    import contextmesh.grpc.compression_pb2_grpc as pb2_grpc
+except ImportError:
+    logger.warning("gRPC proto files not generated yet. Run: python -m grpc_tools.protoc")
+    pb2 = None
+    pb2_grpc = None
+
+
+class CompressionServicer:
+    """gRPC servicer for compression service.
+
+    Implements the CompressionService interface defined in
+    compression.proto. Wraps the CompressionPipeline.
+
+    Attributes:
+        pipeline: The compression pipeline instance.
+    """
+
+    def __init__(self, pipeline: CompressionPipeline | None = None) -> None:
+        """Initialize compression servicer.
+
+        Args:
+            pipeline: Optional pipeline override.
+        """
+        self.pipeline = pipeline or CompressionPipeline()
+
+    def Compress(
+        self,
+        request: Any,
+        context: Any,
+    ) -> Any:
+        """Compress tool output via gRPC.
+
+        Args:
+            request: CompressRequest proto.
+            context: gRPC context.
+
+        Returns:
+            CompressResponse proto.
+        """
+        try:
+            inp = CompressionInput(
+                session_id=request.session_id,
+                task_id=request.task_id,
+                tool_name=request.tool_name,
+                tool_args=_parse_tool_args(request.tool_args_json),
+                raw_output=request.raw_output,
+                task_description=request.task_description,
+                recent_steps=list(request.recent_steps),
+                budget_tokens=request.budget_tokens or 8000,
+            )
+
+            result = self.pipeline.compress(inp)
+
+            return pb2.CompressResponse(
+                compressed_output=result.compressed_output,
+                original_tokens=result.original_tokens,
+                compressed_tokens=result.compressed_tokens,
+                compression_ratio=result.compression_ratio,
+                chunks_selected=result.chunks_selected,
+                chunks_total=result.chunks_total,
+                trace_id=result.trace_id or "",
+                chunk_types_selected=result.chunk_types_selected,
+            )
+
+        except Exception as e:
+            logger.error(f"Compression failed: {e}")
+            context.set_code(grpc.StatusCode.INTERNAL)
+            context.set_details(str(e))
+            return pb2.CompressResponse()
+
+    def Health(
+        self,
+        request: Any,
+        context: Any,
+    ) -> Any:
+        """Health check via gRPC.
+
+        Args:
+            request: HealthRequest proto.
+            context: gRPC context.
+
+        Returns:
+            HealthResponse proto.
+        """
+        return pb2.HealthResponse(status="healthy")
+
+
+def _parse_tool_args(tool_args_json: str) -> dict[str, Any]:
+    """Parse tool arguments from JSON string.
+
+    Args:
+        tool_args_json: JSON-encoded tool arguments.
+
+    Returns:
+        Parsed arguments dictionary.
+    """
+    import json
+
+    if not tool_args_json:
+        return {}
+
+    try:
+        return json.loads(tool_args_json)
+    except json.JSONDecodeError:
+        logger.warning(f"Failed to parse tool_args_json: {tool_args_json}")
+        return {}
+
+
+def create_server(
+    port: int = 50051,
+    max_workers: int = 4,
+) -> grpc.Server:
+    """Create and configure gRPC server.
+
+    Args:
+        port: Port to listen on.
+        max_workers: Maximum concurrent workers.
+
+    Returns:
+        Configured gRPC server.
+    """
+    server = grpc.server(futures.ThreadPoolExecutor(max_workers=max_workers))
+    servicer = CompressionServicer()
+    pb2_grpc.add_CompressionServiceServicer_to_server(servicer, server)
+    server.add_insecure_port(f"[::]:{port}")
+    return server
+
+
+def serve(
+    port: int = 50051,
+    log_level: str = "INFO",
+) -> None:
+    """Start the gRPC compression server.
+
+    Args:
+        port: Port to listen on.
+        log_level: Logging level.
+    """
+    logging.basicConfig(
+        level=getattr(logging, log_level.upper()),
+        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    )
+
+    server = create_server(port)
+    server.start()
+    logger.info(f"Compression gRPC server started on port {port}")
+
+    try:
+        server.wait_for_termination()
+    except KeyboardInterrupt:
+        logger.info("Shutting down gRPC server")
+        server.stop(0)
+
+
+if __name__ == "__main__":
+    import argparse
+
+    parser = argparse.ArgumentParser(description="ContextMesh gRPC Compression Server")
+    parser.add_argument("--port", type=int, default=50051, help="Port to listen on")
+    parser.add_argument(
+        "--log-level",
+        default="INFO",
+        choices=["DEBUG", "INFO", "WARN", "ERROR"],
+    )
+    args = parser.parse_args()
+
+    serve(port=args.port, log_level=args.log_level)

@@ -1,0 +1,158 @@
+[build-system]
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[project]
+name = "contextmesh"
+version = "0.1.0"
+description = "MCP-native context compression runtime for AI agents"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.12"
+authors = [
+    { name = "ContextMesh Authors" }
+]
+keywords = [
+    "mcp",
+    "context-compression",
+    "ai-agents",
+    "llm",
+    "context-window"
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
+dependencies = [
+    "tiktoken>=0.7.0",
+    "lxml>=5.0.0",
+    "grpcio>=1.60.0",
+    "grpcio-tools>=1.60.0",
+    "psycopg2-binary>=2.9.9",
+    "numpy>=1.26.0",
+    "pyyaml>=6.0.1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-cov>=4.1.0",
+    "pytest-asyncio>=0.23.0",
+    "ruff>=0.2.0",
+    "mypy>=1.8.0",
+    "tree-sitter>=0.21.0",
+    "tree-sitter-languages>=1.10.0",
+    "sentence-transformers>=2.3.0",
+]
+embeddings = [
+    "sentence-transformers>=2.3.0",
+]
+dashboard = [
+    "fastapi>=0.109.0",
+    "uvicorn[standard]>=0.27.0",
+    "asyncpg>=0.29.0",
+    "pgvector>=0.2.3",
+]
+
+[project.urls]
+Homepage = "https://github.com/code-infected/context-mesh"
+Documentation = "https://github.com/code-infected/context-mesh"
+Repository = "https://github.com/code-infected/context-mesh"
+Issues = "https://github.com/code-infected/context-mesh/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["contextmesh"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+asyncio_mode = "auto"
+filterwarnings = [
+    "error",
+    "ignore::DeprecationWarning",
+]
+
+[tool.coverage.run]
+source = ["contextmesh"]
+branch = true
+omit = [
+    "*/tests/*",
+    "*/benchmarks/*",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "if TYPE_CHECKING:",
+    "raise NotImplementedError",
+]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+select = [
+    "E",     # pycodestyle errors
+    "W",     # pycodestyle warnings
+    "F",     # Pyflakes
+    "I",     # isort
+    "B",     # flake8-bugbear
+    "C4",    # flake8-comprehensions
+    "UP",    # pyupgrade
+    "RUF",   # Ruff-specific rules
+]
+ignore = [
+    "E501",  # line too long (handled by formatter)
+    "B008",  # do not perform function calls in argument defaults
+]
+
+[tool.ruff.isort]
+force-single-line = false
+combine-as-imports = true
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+
+[[tool.mypy.overrides]]
+module = "tiktoken.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "sentence_transformers.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "tree_sitter.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "lxml.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "grpcio.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "psycopg2.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "asyncpg.*"
+ignore_missing_imports = true
