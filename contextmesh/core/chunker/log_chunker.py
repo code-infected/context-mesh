@@ -11,6 +11,7 @@ Architecture:
 
 from __future__ import annotations
 
+import json
 import re
 from dataclasses import dataclass
 from typing import ClassVar
@@ -210,8 +211,6 @@ class LogChunker(ChunkerBase):
         try:
             json_start = line.index("{")
             if json_start >= 0 and line.strip().endswith(("}", "]")):
-                import json
-
                 json_str = line[json_start:]
                 parsed = json.loads(json_str)
                 if isinstance(parsed, dict):

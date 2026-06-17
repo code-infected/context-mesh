@@ -144,7 +144,7 @@ class Chunk:
             chunk_type=self.chunk_type,
             token_count=self.token_count,
             start_pos=self.start_pos,
-            dependencies=self.dependencies + tuple(deps),
+            dependencies=tuple(list(self.dependencies) + deps),
             metadata=self.metadata,
         )
 

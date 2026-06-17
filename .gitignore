@@ -94,6 +94,9 @@ dashboard/frontend/build/
 results/
 *.csv
 
+# Agent workspace
+.opencode/
+
 # Temporary files
 *.tmp
 *.bak

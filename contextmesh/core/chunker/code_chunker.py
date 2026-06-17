@@ -23,6 +23,8 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING, ClassVar
 
 from tree_sitter import Language, Parser
+from tree_sitter_python import language as python_language
+from tree_sitter_typescript import language_typescript, language_tsx
 
 from contextmesh.core.chunker.base import (
     Chunk,
@@ -41,8 +43,12 @@ LANGUAGE_EXTENSIONS: dict[str, str] = {
     "python": ".py",
     "typescript": ".ts",
     "javascript": ".js",
-    "rust": ".rs",
-    "go": ".go",
+}
+
+LANGUAGE_MAP: dict[str, Language] = {
+    "python": Language(python_language()),
+    "typescript": Language(language_typescript()),
+    "tsx": Language(language_tsx()),
 }
 
 
@@ -120,20 +126,15 @@ class CodeChunker(ChunkerBase):
         Raises:
             ChunkerError: If language is not supported.
         """
-        if language not in LANGUAGE_EXTENSIONS:
-            raise ChunkerError(f"Unsupported language: {language}", format=self.format)
+        if language not in LANGUAGE_MAP:
+            raise ChunkerError(
+                f"Unsupported language: {language}. Supported: {list(LANGUAGE_MAP.keys())}",
+                format=self.format,
+            )
 
         self.language = language
         self.config = config or CodeChunkConfig()
-        self._parser = Parser()
-        try:
-            lang_module = __import__(f"tree_sitter_{language}")
-            self._parser.language = getattr(lang_module, f"language_{language}")()
-        except (ModuleNotFoundError, AttributeError) as e:
-            raise ChunkerError(
-                f"Failed to load tree-sitter language '{language}': {e}",
-                format=self.format,
-            ) from e
+        self._parser = Parser(LANGUAGE_MAP[language])
         self._tokenizer = TokenCounter.get_default()
 
     def chunk(self, content: str) -> list[Chunk]:
