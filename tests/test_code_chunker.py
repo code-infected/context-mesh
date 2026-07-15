@@ -1,6 +1,7 @@
 """Test suite for code chunker."""
 
 import pytest
+
 from contextmesh.core.chunker.code_chunker import CodeChunker
 
 
@@ -46,9 +47,8 @@ def main():
         assert chunks == []
 
     def test_handles_unsupported_language(self) -> None:
-        """Test unsupported language raises error."""
+        """Test unsupported language raises error at construction."""
         from contextmesh.core.chunker.base import ChunkerError
 
-        chunker = CodeChunker("unsupported_language")
         with pytest.raises(ChunkerError):
-            chunker.chunk("some code")
+            CodeChunker("unsupported_language")

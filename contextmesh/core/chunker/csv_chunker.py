@@ -15,10 +15,10 @@ from typing import ClassVar
 
 from contextmesh.core.chunker.base import (
     Chunk,
-    ChunkFormat,
-    ChunkType,
     ChunkerBase,
     ChunkerError,
+    ChunkFormat,
+    ChunkType,
 )
 from contextmesh.core.tokenizer import TokenCounter
 

@@ -1,9 +1,8 @@
 """Test suite for budget extractor."""
 
-import pytest
 from contextmesh.core.chunker.base import Chunk, ChunkFormat, ChunkType, ScoredChunk
 from contextmesh.core.chunker.dependency_graph import DependencyGraph
-from contextmesh.core.extractor.budget_extractor import BudgetExtractor, ExtractorConfig
+from contextmesh.core.extractor.budget_extractor import BudgetExtractor
 
 
 class TestBudgetExtractor:

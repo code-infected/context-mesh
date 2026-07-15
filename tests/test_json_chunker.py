@@ -1,6 +1,7 @@
 """Test suite for JSON chunker."""
 
 import pytest
+
 from contextmesh.core.chunker.json_chunker import JSONChunker
 
 

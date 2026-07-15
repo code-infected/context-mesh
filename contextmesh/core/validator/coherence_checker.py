@@ -168,32 +168,31 @@ class CoherenceChecker:
         Returns:
             Tuple of (is_valid, fixed_chunks, violations_fixed).
         """
-        body_ids = {
-            c.id for c in chunks
-            if c.chunk_type in (ChunkType.CODE_FUNCTION, ChunkType.CODE_CLASS)
-        }
-
-        if not body_ids:
+        code_ids = {c.id for c in chunks if c.format == ChunkFormat.CODE}
+        if not code_ids:
             return True, chunks, 0
 
-        needed_sigs: set[str] = set()
-        for body_id in body_ids:
-            for chunk_id, chunk in dependency_graph.chunks.items():
-                if body_id in chunk.dependencies:
-                    needed_sigs.add(chunk_id)
-
+        # A selected chunk must not reference a pruned chunk it depends
+        # on (a split-function body without its signature head, a caller
+        # without its helper). Force-include the missing *dependencies*
+        # — never the dependents: pulling in callers of a selected chunk
+        # cascades until the whole file is re-included.
         current_ids = {c.id for c in chunks}
-        missing_sigs = needed_sigs - current_ids
+        missing: set[str] = set()
+        for chunk in chunks:
+            if chunk.format != ChunkFormat.CODE:
+                continue
+            for dep_id in chunk.dependencies:
+                if dep_id not in current_ids and dep_id in dependency_graph.chunks:
+                    missing.add(dep_id)
 
-        if not missing_sigs:
+        if not missing:
             return True, chunks, 0
 
-        for sig_id in missing_sigs:
-            if sig_id in dependency_graph.chunks:
-                chunks.append(dependency_graph.chunks[sig_id])
+        for dep_id in missing:
+            chunks.append(dependency_graph.chunks[dep_id])
 
-        violations = len(missing_sigs)
-        return False, chunks, violations
+        return False, chunks, len(missing)
 
     def _validate_json(
         self,
@@ -213,23 +212,23 @@ class CoherenceChecker:
         if not json_chunks:
             return True, chunks, 0
 
-        sorted_chunks = sorted(json_chunks, key=lambda c: c.start_pos)
-        content = "".join(c.content for c in sorted_chunks)
+        # The JSON chunker guarantees each chunk is a self-contained valid
+        # JSON object ({"<path>": <value>}), so the selection is coherent
+        # iff every chunk parses on its own. Chunks that fail to parse
+        # (e.g., produced by the mixed chunker's boundary detection) are
+        # dropped rather than emitting broken JSON to the agent.
+        broken = []
+        for chunk in json_chunks:
+            try:
+                json.loads(chunk.content)
+            except json.JSONDecodeError:
+                broken.append(chunk.id)
 
-        try:
-            json.loads(content)
+        if not broken:
             return True, chunks, 0
-        except json.JSONDecodeError:
-            pass
 
-        try:
-            content = "{" + content + "}"
-            json.loads(content)
-            return True, chunks, 0
-        except json.JSONDecodeError:
-            pass
-
-        return False, chunks, 1
+        fixed = [c for c in chunks if c.id not in set(broken)]
+        return False, fixed, len(broken)
 
     def _validate_logs(
         self,

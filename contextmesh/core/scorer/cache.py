@@ -12,7 +12,7 @@ from typing import TYPE_CHECKING
 import numpy as np
 
 if TYPE_CHECKING:
-    from contextmesh.core.chunker.base import Chunk
+    pass
 
 
 class EmbeddingCache:
@@ -39,6 +39,8 @@ class EmbeddingCache:
         """
         self.max_size = max_size
         self._cache: OrderedDict[str, np.ndarray] = OrderedDict()
+        self._hits = 0
+        self._misses = 0
 
     def get(self, key: str) -> np.ndarray | None:
         """Get embedding from cache.
@@ -50,8 +52,10 @@ class EmbeddingCache:
             Embedding vector or None if not found.
         """
         if key not in self._cache:
+            self._misses += 1
             return None
 
+        self._hits += 1
         self._cache.move_to_end(key)
         return self._cache[key]
 
@@ -84,8 +88,10 @@ class EmbeddingCache:
         return key in self._cache
 
     def clear(self) -> None:
-        """Clear all cached entries."""
+        """Clear all cached entries and reset hit/miss counters."""
         self._cache.clear()
+        self._hits = 0
+        self._misses = 0
 
     def size(self) -> int:
         """Get current cache size.
@@ -96,15 +102,13 @@ class EmbeddingCache:
         return len(self._cache)
 
     def hit_rate(self) -> float:
-        """Calculate cache hit rate.
-
-        Note: This requires tracking hits/misses separately.
-        Returns 0.0 as a placeholder when tracking not implemented.
+        """Calculate cache hit rate over all lookups since last clear.
 
         Returns:
-            Hit rate as a float between 0 and 1.
+            Hit rate as a float between 0 and 1 (0.0 before any lookup).
         """
-        return 0.0
+        lookups = self._hits + self._misses
+        return self._hits / lookups if lookups else 0.0
 
     def get_stats(self) -> dict[str, int | float]:
         """Get cache statistics.
@@ -116,4 +120,7 @@ class EmbeddingCache:
             "size": len(self._cache),
             "max_size": self.max_size,
             "utilization": len(self._cache) / self.max_size if self.max_size > 0 else 0.0,
+            "hits": self._hits,
+            "misses": self._misses,
+            "hit_rate": self.hit_rate(),
         }

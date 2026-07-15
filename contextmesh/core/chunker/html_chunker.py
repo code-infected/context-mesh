@@ -13,17 +13,16 @@ from __future__ import annotations
 
 from typing import ClassVar
 
-from lxml import html, etree
+from lxml import etree, html
 
 from contextmesh.core.chunker.base import (
     Chunk,
-    ChunkFormat,
-    ChunkType,
     ChunkerBase,
     ChunkerError,
+    ChunkFormat,
+    ChunkType,
 )
 from contextmesh.core.tokenizer import TokenCounter
-
 
 SEMANTIC_TAGS: frozenset[str] = frozenset([
     "article", "section", "main", "nav", "aside", "header", "footer",

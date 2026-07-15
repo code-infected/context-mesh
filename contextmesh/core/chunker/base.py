@@ -35,6 +35,7 @@ class ChunkFormat(Enum):
     HTML = "html"
     CSV = "csv"
     SHELL = "shell"
+    MARKDOWN = "markdown"
     TEXT = "text"
 
 
@@ -71,6 +72,10 @@ class ChunkType(Enum):
 
     SHELL_COMMAND = "command"
     SHELL_OUTPUT = "output"
+
+    MARKDOWN_SECTION = "md_section"
+    MARKDOWN_CODE_BLOCK = "md_code_block"
+    MARKDOWN_PREAMBLE = "md_preamble"
 
     TEXT_PARAGRAPH = "paragraph"
     TEXT_LINE = "line"

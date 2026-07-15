@@ -6,15 +6,13 @@ to verify that the chunker correctly segments code into
 semantic units.
 """
 
-import os
-import sys
 import hashlib
-import secrets
 import logging
-from typing import Optional, Dict, List, Tuple, Any
+import secrets
+from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
-from dataclasses import dataclass, field
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -74,11 +72,11 @@ class User:
     username: str
     email: str
     password_hash: str
-    permissions: List[PermissionLevel] = field(default_factory=list)
+    permissions: list[PermissionLevel] = field(default_factory=list)
     is_active: bool = True
     created_at: datetime = field(default_factory=datetime.now)
-    last_login: Optional[datetime] = None
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    last_login: datetime | None = None
+    metadata: dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass
@@ -91,7 +89,7 @@ class Token:
     expires_at: datetime
     created_at: datetime = field(default_factory=datetime.now)
     is_revoked: bool = False
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    metadata: dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass
@@ -104,8 +102,8 @@ class Session:
     expires_at: datetime
     created_at: datetime = field(default_factory=datetime.now)
     last_accessed: datetime = field(default_factory=datetime.now)
-    ip_address: Optional[str] = None
-    user_agent: Optional[str] = None
+    ip_address: str | None = None
+    user_agent: str | None = None
 
 
 class PasswordHasher:
@@ -170,15 +168,15 @@ class TokenManager:
 
     def __init__(self) -> None:
         """Initialize token manager."""
-        self._tokens: Dict[str, Token] = {}
+        self._tokens: dict[str, Token] = {}
         self._revoked: set[str] = set()
 
     def create_token(
         self,
         user_id: str,
         token_type: TokenType = TokenType.ACCESS,
-        ttl: Optional[timedelta] = None,
-        metadata: Optional[Dict[str, Any]] = None,
+        ttl: timedelta | None = None,
+        metadata: dict[str, Any] | None = None,
     ) -> Token:
         """Create a new authentication token.
 
@@ -311,14 +309,14 @@ class SessionManager:
 
     def __init__(self) -> None:
         """Initialize session manager."""
-        self._sessions: Dict[str, Session] = {}
-        self._user_sessions: Dict[str, List[str]] = {}
+        self._sessions: dict[str, Session] = {}
+        self._user_sessions: dict[str, list[str]] = {}
 
     def create_session(
         self,
         user_id: str,
-        ip_address: Optional[str] = None,
-        user_agent: Optional[str] = None,
+        ip_address: str | None = None,
+        user_agent: str | None = None,
     ) -> Session:
         """Create a new user session.
 
@@ -450,14 +448,14 @@ class AuthenticationService:
         self.password_hasher = PasswordHasher()
         self.token_manager = TokenManager()
         self.session_manager = SessionManager()
-        self._users: Dict[str, User] = {}
+        self._users: dict[str, User] = {}
 
     def register_user(
         self,
         username: str,
         email: str,
         password: str,
-        permissions: Optional[List[PermissionLevel]] = None,
+        permissions: list[PermissionLevel] | None = None,
     ) -> User:
         """Register a new user.
 
@@ -498,9 +496,9 @@ class AuthenticationService:
         self,
         username: str,
         password: str,
-        ip_address: Optional[str] = None,
-        user_agent: Optional[str] = None,
-    ) -> Tuple[User, Session, Token]:
+        ip_address: str | None = None,
+        user_agent: str | None = None,
+    ) -> tuple[User, Session, Token]:
         """Authenticate a user with username and password.
 
         Args:
@@ -609,7 +607,7 @@ class AuthenticationService:
 
         return True
 
-    def _find_user_by_username(self, username: str) -> Optional[User]:
+    def _find_user_by_username(self, username: str) -> User | None:
         """Find a user by username.
 
         Args:
@@ -623,7 +621,7 @@ class AuthenticationService:
                 return user
         return None
 
-    def get_user(self, user_id: str) -> Optional[User]:
+    def get_user(self, user_id: str) -> User | None:
         """Get a user by ID.
 
         Args:
@@ -637,7 +635,7 @@ class AuthenticationService:
     def update_user_permissions(
         self,
         user_id: str,
-        permissions: List[PermissionLevel],
+        permissions: list[PermissionLevel],
     ) -> User:
         """Update a user's permissions.
 
@@ -676,7 +674,7 @@ class AuthenticationService:
         self.session_manager.revoke_all_sessions(user_id)
         logger.info(f"Deactivated user {user.username}")
 
-    def cleanup(self) -> Dict[str, int]:
+    def cleanup(self) -> dict[str, int]:
         """Run cleanup tasks for expired tokens and sessions.
 
         Returns:
@@ -705,7 +703,7 @@ class AuthMiddleware:
             auth_service: Authentication service instance.
         """
         self.auth_service = auth_service
-        self._excluded_paths: List[str] = [
+        self._excluded_paths: list[str] = [
             "/health",
             "/api/v1/auth/register",
             "/api/v1/auth/login",
@@ -734,8 +732,8 @@ class AuthMiddleware:
     def process_request(
         self,
         path: str,
-        headers: Dict[str, str],
-    ) -> Optional[User]:
+        headers: dict[str, str],
+    ) -> User | None:
         """Process a request for authentication.
 
         Args:
@@ -760,9 +758,9 @@ class AuthMiddleware:
 
     def process_response(
         self,
-        user: Optional[User],
+        user: User | None,
         status_code: int,
-    ) -> Dict[str, str]:
+    ) -> dict[str, str]:
         """Process a response to add auth headers.
 
         Args:
@@ -772,7 +770,7 @@ class AuthMiddleware:
         Returns:
             Response headers to add.
         """
-        headers: Dict[str, str] = {}
+        headers: dict[str, str] = {}
 
         if user:
             headers["X-User-Id"] = user.id

@@ -20,7 +20,7 @@ import sys
 from pathlib import Path
 
 from contextmesh.core.chunker.base import CompressionInput
-from contextmesh.core.pipeline import CompressionPipeline, PipelineConfig
+from contextmesh.core.pipeline import CompressionPipeline
 
 
 def setup_logging(level: str = "INFO") -> None:

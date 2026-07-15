@@ -23,16 +23,14 @@ from typing import ClassVar
 
 from contextmesh.core.chunker.base import (
     Chunk,
-    ChunkFormat,
     ChunkerBase,
-    ChunkerError,
+    ChunkFormat,
 )
 from contextmesh.core.chunker.code_chunker import CodeChunker
 from contextmesh.core.chunker.html_chunker import HTMLChunker
 from contextmesh.core.chunker.json_chunker import JSONChunker
 from contextmesh.core.chunker.log_chunker import LogChunker
 from contextmesh.core.chunker.shell_chunker import ShellChunker
-
 
 JSON_START = re.compile(r'^\s*[\[{]')
 CODE_BLOCK = re.compile(

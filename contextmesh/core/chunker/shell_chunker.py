@@ -16,13 +16,11 @@ from typing import ClassVar
 
 from contextmesh.core.chunker.base import (
     Chunk,
+    ChunkerBase,
     ChunkFormat,
     ChunkType,
-    ChunkerBase,
-    ChunkerError,
 )
 from contextmesh.core.tokenizer import TokenCounter
-
 
 PROMPT_PATTERNS: list[re.Pattern[str]] = [
     re.compile(r"^\$\s+", re.MULTILINE),

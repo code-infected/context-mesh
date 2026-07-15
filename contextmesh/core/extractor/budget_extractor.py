@@ -10,8 +10,9 @@ Architecture:
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Callable
+from typing import TYPE_CHECKING
 
 from contextmesh.core.chunker.base import Chunk, ScoredChunk
 
@@ -74,13 +75,16 @@ class BudgetExtractor:
             scored_chunks: Chunks sorted by adjusted score descending.
             budget: Maximum tokens allowed.
             dependency_graph: Chunk dependency graph.
-            get_token_count: Function to get token count for chunk ID.
+            get_token_count: Function to get token count for chunk ID;
+                defaults to looking the chunk up in the dependency graph.
 
         Returns:
             Selected chunks in original order.
         """
         if get_token_count is None:
-            get_token_count = self._default_token_count
+            def get_token_count(chunk_id: str) -> int:
+                chunk = dependency_graph.chunks.get(chunk_id)
+                return chunk.token_count if chunk else 0
 
         if not scored_chunks:
             return []
@@ -98,32 +102,25 @@ class BudgetExtractor:
             deps = dependency_graph.get_dependencies(chunk_id, transitive=True)
             all_needed = deps | {chunk_id}
 
-            total_tokens = sum(
-                get_token_count(dep_id) for dep_id in all_needed
-                if dep_id in dependency_graph.chunks
-            )
+            # Only unselected chunks cost budget; shared dependencies that
+            # were already selected must not be charged a second time.
+            needed_new = {
+                dep_id for dep_id in all_needed
+                if dep_id not in selected and dep_id in dependency_graph.chunks
+            }
 
-            if total_tokens <= remaining_budget + slack:
-                selected.update(all_needed)
+            total_tokens = sum(get_token_count(dep_id) for dep_id in needed_new)
+
+            # Slack exists to pull in dependencies; a chunk with none must
+            # fit the plain remaining budget.
+            allowance = remaining_budget + (slack if len(needed_new) > 1 else 0)
+
+            if total_tokens <= allowance:
+                selected.update(needed_new)
                 remaining_budget -= total_tokens
 
         selected_list = dependency_graph.original_order(list(selected))
         return [dependency_graph.chunks[cid] for cid in selected_list if cid in dependency_graph.chunks]
-
-    def _default_token_count(self, chunk_id: str) -> int:
-        """Default token count getter (raises error).
-
-        Args:
-            chunk_id: Chunk ID.
-
-        Returns:
-            Token count (always 0, use proper getter).
-
-        Raises:
-            ValueError: Always raised when called.
-        """
-        raise ValueError("Must provide get_token_count function")
-
 
 def create_dependency_aware_extractor() -> BudgetExtractor:
     """Create extractor with default configuration.

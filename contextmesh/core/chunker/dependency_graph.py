@@ -182,7 +182,7 @@ class DependencyGraph:
         Returns:
             List of chunk IDs in topological order.
         """
-        in_degree: dict[str, int] = {cid: 0 for cid in self.chunks}
+        in_degree: dict[str, int] = dict.fromkeys(self.chunks, 0)
         for deps in self.outgoing.values():
             for dep in deps:
                 if dep in in_degree:

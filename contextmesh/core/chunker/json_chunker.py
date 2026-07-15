@@ -1,24 +1,34 @@
 """Recursive JSON chunker.
 
-Segments JSON by key depth, creating parent-child relationships
-that preserve structure. Small leaf values are merged with parents
-to avoid overly granular chunks.
+Segments parsed JSON by key depth. Each chunk is a self-describing,
+valid JSON object that maps the dotted path of a subtree to its value:
+
+    {"root.users[3].profile": {"name": "Alice", ...}}
+
+Chunks never overlap: every value in the input appears in exactly one
+chunk. Small sibling values are merged into a single chunk (multiple
+path keys in one object) to avoid overly granular output.
 
 Architecture:
-    JSON string -> json.loads() -> recursive segmentation ->
-    depth-based chunk creation -> structure-preserving chunks
+    JSON string -> json.loads() -> recursive walk over parsed data ->
+    subtree serialization (json.dumps) -> non-overlapping chunks
+
+Positions: start_pos is a traversal-order counter, not a byte offset.
+Dict traversal follows document order (Python dicts preserve insertion
+order), so sorting by start_pos reproduces document order.
 """
 
 from __future__ import annotations
 
+import json
 from typing import Any, ClassVar
 
 from contextmesh.core.chunker.base import (
     Chunk,
-    ChunkFormat,
-    ChunkType,
     ChunkerBase,
     ChunkerError,
+    ChunkFormat,
+    ChunkType,
 )
 from contextmesh.core.tokenizer import TokenCounter
 
@@ -26,17 +36,18 @@ from contextmesh.core.tokenizer import TokenCounter
 class JSONChunker(ChunkerBase):
     """Depth-based recursive JSON chunker.
 
-    Creates chunks at configurable key depth. Leaf values below
-    a token threshold are merged with parent chunks. Always
-    preserves valid JSON structure.
+    Containers larger than max_chunk_tokens are split by their children
+    (up to max_depth); leaves and small subtrees below min_chunk_tokens
+    are merged with their siblings. Every chunk's content is itself
+    valid JSON.
 
     Attributes:
-        max_depth: Key depth at which to create chunks.
-        min_chunk_tokens: Merge leaves below this size.
+        max_depth: Maximum key depth at which containers are still split.
+        min_chunk_tokens: Subtrees at or below this size merge with siblings.
+        max_chunk_tokens: Containers at or below this size stay whole.
 
     Example:
         >>> chunker = JSONChunker(max_depth=4, min_chunk_tokens=30)
-        >>> data = {"users": [{"id": 1, "name": "Alice"}]}
         >>> chunks = chunker.chunk('{"users": [{"id": 1, "name": "Alice"}]}')
     """
 
@@ -46,380 +57,166 @@ class JSONChunker(ChunkerBase):
         self,
         max_depth: int = 4,
         min_chunk_tokens: int = 30,
+        max_chunk_tokens: int = 300,
     ) -> None:
         """Initialize JSON chunker.
 
         Args:
-            max_depth: Depth at which to create chunks (1 = top-level keys).
-            min_chunk_tokens: Minimum tokens for a valid leaf chunk.
+            max_depth: Maximum depth at which to split containers.
+            min_chunk_tokens: Merge subtrees at or below this size.
+            max_chunk_tokens: Keep containers at or below this size whole.
         """
         self.max_depth = max_depth
         self.min_chunk_tokens = min_chunk_tokens
+        self.max_chunk_tokens = max_chunk_tokens
         self._tokenizer = TokenCounter.get_default()
 
     def chunk(self, content: str) -> list[Chunk]:
-        """Segment JSON into depth-based chunks.
+        """Segment JSON into depth-based, non-overlapping chunks.
 
         Args:
             content: JSON string to chunk.
 
         Returns:
-            List of Chunks preserving JSON structure.
+            List of Chunks, each containing valid JSON.
 
         Raises:
             ChunkerError: If content is not valid JSON.
         """
-        try:
-            data = self._parse_json(content)
-        except Exception as e:
-            raise ChunkerError(f"Failed to parse JSON: {e}", format=self.format) from e
-
-        if data is None:
+        if not content or not content.strip():
             return []
 
+        try:
+            data = json.loads(content)
+        except (ValueError, TypeError) as e:
+            raise ChunkerError(f"Failed to parse JSON: {e}", format=self.format) from e
+
         chunks: list[Chunk] = []
-        self._chunk_value(
-            data,
-            content,
-            path="root",
-            depth=0,
-            start_pos=0,
-            chunks=chunks,
-        )
+        self._position = 0
+        self._walk(data, "root", 0, chunks)
+        return chunks
 
-        return self._sort_chunks(chunks)
-
-    def _parse_json(self, content: str) -> Any:
-        """Parse JSON content.
-
-        Args:
-            content: JSON string.
-
-        Returns:
-            Parsed JSON object.
-        """
-        import json
-
-        return json.loads(content)
-
-    def _chunk_value(
+    def _walk(
         self,
         value: Any,
-        full_content: str,
         path: str,
         depth: int,
-        start_pos: int,
         chunks: list[Chunk],
     ) -> None:
-        """Recursively chunk a JSON value.
+        """Recursively walk a JSON value, emitting chunks.
 
         Args:
-            value: Current JSON value.
-            full_content: Original JSON string for position tracking.
-            path: Current key path for identification.
+            value: Current JSON value (parsed).
+            path: Dotted key path for identification.
             depth: Current nesting depth.
-            start_pos: Character position in original string.
             chunks: Output list to append to.
         """
+        rendered = self._render({path: value})
+        tokens = self._tokenizer.count(rendered)
+
+        is_splittable = isinstance(value, (dict, list)) and len(value) > 0
+        if not is_splittable or depth >= self.max_depth or tokens <= self.max_chunk_tokens:
+            self._emit(chunks, rendered, tokens, value, path, depth)
+            return
+
+        # Container too large to keep whole: split by children, merging
+        # small siblings in document order.
+        pending: dict[str, Any] = {}
+        pending_tokens = 0
+
+        def flush_pending() -> None:
+            nonlocal pending, pending_tokens
+            if not pending:
+                return
+            merged_rendered = self._render(pending)
+            self._emit(
+                chunks,
+                merged_rendered,
+                self._tokenizer.count(merged_rendered),
+                dict(pending),
+                path,
+                depth + 1,
+                merged_paths=list(pending),
+            )
+            pending = {}
+            pending_tokens = 0
+
         if isinstance(value, dict):
-            self._chunk_object(value, full_content, path, depth, start_pos, chunks)
-        elif isinstance(value, list):
-            self._chunk_array(value, full_content, path, depth, start_pos, chunks)
+            items = [(f"{path}.{k}", v) for k, v in value.items()]
         else:
-            self._chunk_leaf(value, full_content, path, depth, start_pos, chunks)
+            items = [(f"{path}[{i}]", v) for i, v in enumerate(value)]
 
-    def _chunk_object(
+        for child_path, child in items:
+            child_tokens = self._tokenizer.count(self._render({child_path: child}))
+            if child_tokens <= self.min_chunk_tokens or not isinstance(child, (dict, list)):
+                if child_tokens > self.max_chunk_tokens:
+                    # Oversized primitive (e.g., a huge string): emit alone.
+                    flush_pending()
+                    self._walk(child, child_path, depth + 1, chunks)
+                    continue
+                pending[child_path] = child
+                pending_tokens += child_tokens
+                if pending_tokens >= self.max_chunk_tokens:
+                    flush_pending()
+            else:
+                flush_pending()
+                self._walk(child, child_path, depth + 1, chunks)
+
+        flush_pending()
+
+    def _emit(
         self,
-        obj: dict[str, Any],
-        full_content: str,
-        path: str,
-        depth: int,
-        start_pos: int,
         chunks: list[Chunk],
-    ) -> None:
-        """Chunk a JSON object.
-
-        Args:
-            obj: JSON object.
-            full_content: Original JSON string.
-            path: Current path.
-            depth: Current depth.
-            start_pos: Character position.
-            chunks: Output list.
-        """
-        if depth >= self.max_depth:
-            chunk_content = self._extract_json_segment(full_content, start_pos)
-            token_count = self._tokenizer.count(chunk_content)
-
-            chunks.append(
-                Chunk(
-                    id=Chunk.compute_id(chunk_content),
-                    content=chunk_content,
-                    format=ChunkFormat.JSON,
-                    chunk_type=ChunkType.JSON_OBJECT,
-                    token_count=token_count,
-                    start_pos=start_pos,
-                    dependencies=self._get_parent_dependencies(path),
-                    metadata={"path": path, "depth": depth, "num_keys": len(obj)},
-                )
-            )
-            return
-
-        for key, val in obj.items():
-            child_path = f"{path}.{key}"
-            child_start = self._find_key_position(full_content, start_pos, key)
-            self._chunk_value(val, full_content, child_path, depth + 1, child_start, chunks)
-
-    def _chunk_array(
-        self,
-        arr: list[Any],
-        full_content: str,
-        path: str,
-        depth: int,
-        start_pos: int,
-        chunks: list[Chunk],
-    ) -> None:
-        """Chunk a JSON array.
-
-        Args:
-            arr: JSON array.
-            full_content: Original JSON string.
-            path: Current path.
-            depth: Current depth.
-            start_pos: Character position.
-            chunks: Output list.
-        """
-        if depth >= self.max_depth or len(arr) == 0:
-            chunk_content = self._extract_json_segment(full_content, start_pos)
-            token_count = self._tokenizer.count(chunk_content)
-
-            chunks.append(
-                Chunk(
-                    id=Chunk.compute_id(chunk_content),
-                    content=chunk_content,
-                    format=ChunkFormat.JSON,
-                    chunk_type=ChunkType.JSON_ARRAY,
-                    token_count=token_count,
-                    start_pos=start_pos,
-                    dependencies=self._get_parent_dependencies(path),
-                    metadata={"path": path, "depth": depth, "length": len(arr)},
-                )
-            )
-            return
-
-        for i, item in enumerate(arr):
-            child_path = f"{path}[{i}]"
-            child_start = self._find_array_item_position(full_content, start_pos, i)
-            self._chunk_value(item, full_content, child_path, depth + 1, child_start, chunks)
-
-    def _chunk_leaf(
-        self,
+        rendered: str,
+        tokens: int,
         value: Any,
-        full_content: str,
         path: str,
         depth: int,
-        start_pos: int,
-        chunks: list[Chunk],
+        merged_paths: list[str] | None = None,
     ) -> None:
-        """Chunk a primitive JSON value.
+        """Append a chunk for a rendered subtree.
 
         Args:
-            value: Primitive JSON value.
-            full_content: Original JSON string.
-            path: Current path.
-            depth: Current depth.
-            start_pos: Character position.
             chunks: Output list.
+            rendered: Chunk content (valid JSON).
+            tokens: Pre-computed token count of rendered.
+            value: The underlying value, for type classification.
+            path: Path of the subtree (or parent path for merged chunks).
+            depth: Depth of the subtree.
+            merged_paths: Paths merged into this chunk, if any.
         """
-        import json
-
-        chunk_content = self._extract_json_segment(full_content, start_pos)
-        token_count = self._tokenizer.count(chunk_content)
+        if merged_paths is not None:
+            chunk_type = ChunkType.JSON_OBJECT
+            metadata: dict[str, Any] = {
+                "path": path,
+                "depth": depth,
+                "merged_paths": merged_paths,
+            }
+        elif isinstance(value, dict):
+            chunk_type = ChunkType.JSON_OBJECT
+            metadata = {"path": path, "depth": depth, "num_keys": len(value)}
+        elif isinstance(value, list):
+            chunk_type = ChunkType.JSON_ARRAY
+            metadata = {"path": path, "depth": depth, "length": len(value)}
+        else:
+            chunk_type = ChunkType.JSON_LEAF
+            metadata = {"path": path, "depth": depth, "value_type": type(value).__name__}
 
         chunks.append(
             Chunk(
-                id=Chunk.compute_id(chunk_content),
-                content=chunk_content,
+                id=Chunk.compute_id(rendered),
+                content=rendered,
                 format=ChunkFormat.JSON,
-                chunk_type=ChunkType.JSON_LEAF,
-                token_count=token_count,
-                start_pos=start_pos,
-                dependencies=self._get_parent_dependencies(path),
-                metadata={
-                    "path": path,
-                    "depth": depth,
-                    "value_type": type(value).__name__,
-                },
+                chunk_type=chunk_type,
+                token_count=tokens,
+                start_pos=self._position,
+                dependencies=(),
+                metadata=metadata,
             )
         )
+        self._position += 1
 
-    def _extract_json_segment(self, content: str, start_pos: int) -> str:
-        """Extract a JSON segment starting from a position.
-
-        Args:
-            content: Full JSON string.
-            start_pos: Starting position.
-
-        Returns:
-            JSON segment string.
-        """
-        depth = 0
-        in_string = False
-        escape = False
-        start = start_pos
-        end = start_pos
-
-        while end < len(content):
-            char = content[end]
-
-            if escape:
-                escape = False
-                end += 1
-                continue
-
-            if char == "\\":
-                escape = True
-                end += 1
-                continue
-
-            if char == '"':
-                in_string = not in_string
-                end += 1
-                continue
-
-            if in_string:
-                end += 1
-                continue
-
-            if char in "{[{":
-                depth += 1
-            elif char in "]}":
-                depth -= 1
-
-            end += 1
-
-            if depth == 0 and char in "]}":
-                break
-
-        return content[start:end]
-
-    def _find_key_position(
-        self, content: str, start_pos: int, key: str
-    ) -> int:
-        """Find the position of a key in JSON string.
-
-        Args:
-            content: Full JSON string.
-            start_pos: Position to search from.
-            key: Key to find.
-
-        Returns:
-            Character position of the key.
-        """
-        import json
-
-        key_str = f'"{key}"'
-        pos = content.find(key_str, start_pos)
-        if pos == -1:
-            return start_pos
-        return pos
-
-    def _find_array_item_position(
-        self, content: str, start_pos: int, index: int
-    ) -> int:
-        """Find position of array item by index.
-
-        Args:
-            content: Full JSON string.
-            start_pos: Position of array start.
-            index: Item index.
-
-        Returns:
-            Character position of the item.
-        """
-        depth = 0
-        in_string = False
-        escape = False
-        current_index = 0
-        pos = start_pos
-
-        while pos < len(content):
-            char = content[pos]
-
-            if escape:
-                escape = False
-                pos += 1
-                continue
-
-            if char == "\\":
-                escape = True
-                pos += 1
-                continue
-
-            if char == '"':
-                in_string = not in_string
-                pos += 1
-                continue
-
-            if in_string:
-                pos += 1
-                continue
-
-            if char in "[{":
-                depth += 1
-                pos += 1
-                continue
-
-            if char in "]}":
-                depth -= 1
-                pos += 1
-                continue
-
-            if depth == 1 and char == ",":
-                current_index += 1
-                pos += 1
-                continue
-
-            if depth == 1 and current_index == index:
-                if char in " \t\n":
-                    pos += 1
-                    continue
-                return pos
-
-            if depth == 0 and char == "]":
-                return pos
-
-            pos += 1
-
-        return start_pos
-
-    def _get_parent_dependencies(self, path: str) -> tuple[str, ...]:
-        """Get parent chunk IDs from a path.
-
-        Args:
-            path: Dot-notation path like "root.users[0].name".
-
-        Returns:
-            Tuple of parent chunk IDs.
-        """
-        parts = path.split(".")
-        deps: list[str] = []
-
-        for i in range(len(parts) - 1):
-            parent_path = ".".join(parts[: i + 1])
-            parent_path = parent_path.rstrip(".[0-9]")
-            if parent_path:
-                deps.append(parent_path)
-
-        return tuple(deps)
-
-    def _sort_chunks(self, chunks: list[Chunk]) -> list[Chunk]:
-        """Sort chunks by start position.
-
-        Args:
-            chunks: Unsorted chunks.
-
-        Returns:
-            Chunks sorted by start_pos.
-        """
-        return sorted(chunks, key=lambda c: c.start_pos)
+    @staticmethod
+    def _render(payload: dict[str, Any]) -> str:
+        """Serialize a path->value mapping as compact, readable JSON."""
+        return json.dumps(payload, ensure_ascii=False, default=str)

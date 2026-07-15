@@ -1,7 +1,14 @@
 compression:
   default_budget_tokens: 8000
-  max_overhead_ms: 80
+  max_overhead_ms: 80          # soft target: warn above this
+  hard_timeout_ms: 10000       # hard deadline: abort + fail open above this
+                               # (cold-cache CPU embedding can take seconds;
+                               # warm-cache calls are in the tens of ms)
   min_compression_ratio: 0.3
+  max_chunks: 2000             # coarsen chunking above this count
+  prefilter_half_tokens: 30000 # giant outputs: keep head+tail of this many tokens
+  result_cache_size: 256       # LRU for identical (output, task, budget) calls
+  session_dedup: false         # drop chunks already delivered to the session
 
   tool_budgets:
     read_file: 6000
@@ -65,7 +72,10 @@ proxy:
   log_level: "info"
 
 database:
-  url: "postgresql://localhost:5432/contextmesh"
+  # Empty = in-memory trace store. Set a PostgreSQL URL (or the
+  # CONTEXTMESH_DATABASE_URL env var) to persist traces, e.g.
+  # postgresql://contextmesh:contextmesh@localhost:5432/contextmesh
+  url: ""
   pool_size: 10
   vector_dimension: 384
 

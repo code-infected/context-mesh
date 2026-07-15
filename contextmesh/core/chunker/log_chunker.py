@@ -18,13 +18,11 @@ from typing import ClassVar
 
 from contextmesh.core.chunker.base import (
     Chunk,
+    ChunkerBase,
     ChunkFormat,
     ChunkType,
-    ChunkerBase,
-    ChunkerError,
 )
 from contextmesh.core.tokenizer import TokenCounter
-
 
 LOG_LEVEL_PATTERNS: dict[str, re.Pattern[str]] = {
     "TRACE": re.compile(r"\bTRACE\b", re.IGNORECASE),
