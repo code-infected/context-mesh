@@ -11,16 +11,28 @@ cd context-mesh
 pip install -e ".[dev]"
 
 # Install additional dependencies for specific components
-pip install -e ".[embeddings]"   # For scorer development
-pip install -e ".[dashboard]"    # For dashboard development
+pip install -e ".[embeddings]"   # Semantic scoring (torch); tests pass without it too
+pip install -e ".[dashboard]"    # FastAPI backend
+pip install -e ".[benchmarks]"   # anthropic + openai for the real-agent benchmark
 
-# Run tests
+# Run tests (dashboard tests also need: pip install httpx)
 pytest
 
-# Run linting
-ruff check .
-mypy contextmesh/
+# Run linting — same invocation CI uses
+ruff check contextmesh grpc_server.py tests
 ```
+
+TypeScript components build separately:
+
+```bash
+cd contextmesh/proxy/mcp_proxy && npm install && npm run build
+cd contextmesh/proxy/sdk/typescript && npm install && npm run build
+cd contextmesh/dashboard/frontend && npm install && npm run build
+```
+
+CI (`.github/workflows/ci.yml`) runs ruff, the Python test suite
+against a pgvector PostgreSQL service (including a live schema
+migration), and all three npm builds. All of it must pass.
 
 ## Branching Strategy
 
@@ -64,7 +76,7 @@ pytest
 pytest --cov=contextmesh --cov-report=html
 
 # Run specific test file
-pytest tests/core/test_chunker.py
+pytest tests/test_chunkers.py
 
 # Run with verbose output
 pytest -v
@@ -80,4 +92,18 @@ core/scorer/*       <- chunker output, guideline_adjuster
 core/extractor/*    <- scorer output, chunker
 core/validator/*    <- extractor output
 core/pipeline.py    <- all core components
+config.py           <- consumed by pipeline factory, gRPC server, dashboard, SDK
+feedback/*          <- consumes traces from pipeline; feeds guideline_adjuster
+dashboard/backend   <- pipeline + feedback (shared guideline store)
+proxy/mcp_proxy     <- gRPC service (grpc_server.py); proto in proxy/mcp_proxy/proto
+```
+
+The gRPC stubs in `contextmesh/grpc/compression_pb2*.py` are generated
+from `contextmesh/proxy/mcp_proxy/proto/compression.proto` and are
+committed. If you change the proto, regenerate them with:
+
+```bash
+python -m grpc_tools.protoc -I contextmesh/proxy/mcp_proxy/proto \
+  --python_out=contextmesh/grpc --grpc_python_out=contextmesh/grpc \
+  --pyi_out=contextmesh/grpc compression.proto
 ```

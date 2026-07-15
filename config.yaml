@@ -52,6 +52,9 @@ chunker:
   shell:
     min_lines_per_chunk: 3
     blank_line_separator: true
+  markdown:
+    max_chunk_tokens: 400
+    min_chunk_tokens: 20
 
 extractor:
   dependency_budget_slack: 0.15

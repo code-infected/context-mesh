@@ -87,6 +87,9 @@ asyncio_mode = "auto"
 filterwarnings = [
     "error",
     "ignore::DeprecationWarning",
+    # Newer starlette warns when its TestClient runs on httpx instead of
+    # httpx2; without this, -W error turns it into a collection failure.
+    "ignore:Using .httpx. with .starlette.testclient.",
 ]
 
 [tool.coverage.run]

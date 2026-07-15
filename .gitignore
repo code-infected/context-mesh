@@ -1,4 +1,4 @@
-# Byte-compiled / optimized / DLL files
+﻿# Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
@@ -78,8 +78,6 @@ contextmesh.db
 # Logs
 *.log
 
-# gRPC generated files
-**/compression_pb2*.py
 
 # Node
 node_modules/

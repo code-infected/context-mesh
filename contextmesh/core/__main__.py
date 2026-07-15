@@ -4,8 +4,8 @@ Provides command-line interface for running compression
 directly on files or text input.
 
 Usage:
-    python -m contextmesh.core.pipeline --help
-    python -m contextmesh.core.pipeline --tool-name read_file \
+    python -m contextmesh.core --help
+    python -m contextmesh.core --tool-name read_file \
         --input tests/fixtures/large_python_file.py \
         --task "find all authentication-related functions" \
         --budget 4000

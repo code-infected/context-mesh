@@ -1,5 +1,7 @@
 # ContextMesh
 
+[![CI](https://github.com/code-infected/context-mesh/actions/workflows/ci.yml/badge.svg)](https://github.com/code-infected/context-mesh/actions/workflows/ci.yml)
+
 > A production, MCP-native context compression runtime for long-running AI agents.
 > Intercepts tool outputs before they enter the agent context window, extracts only
 > task-relevant content, and improves extraction quality over time through failure analysis.
@@ -8,19 +10,31 @@
 
 ContextMesh sits between an AI agent's reasoning loop and the tools it calls. When a tool
 returns output (e.g., a 40k-token file read), ContextMesh compresses it to only the
-task-relevant sections before the agent sees it.
+task-relevant sections before the agent sees it. It is model-agnostic: scoring uses a
+local embedding model, so no LLM API is involved in the hot path.
 
 **Key capabilities:**
-- **Type-aware chunking**: Format-specific segmentation (AST-based for code, key-depth for JSON, DOM-based for HTML, etc.)
-- **Task-conditioned relevance scoring**: Embedding-based scoring against task context
-- **Budget-constrained extraction**: 0-1 knapsack selection with dependency awareness
-- **Coherence validation**: Ensures extracted chunks form readable output
-- **ACON failure loop**: Offline feedback that learns from compression failures
+- **Type-aware chunking**: AST-based for code (Python/TS/JS/Rust/Go via tree-sitter),
+  structure-preserving for JSON, heading-based for Markdown, plus HTML, CSV, logs, and shell
+- **Task-conditioned relevance scoring**: semantic embeddings blended with an exact-token
+  lexical signal; rolling task context that follows the agent's recent steps
+- **Budget-constrained extraction**: greedy knapsack selection with dependency awareness
+  and coherence validation (signatures travel with bodies, JSON stays valid)
+- **Fail-open by construction**: timeouts, vague tasks, tiny outputs, and errors all
+  return the raw output — compression never blocks or truncates a tool call to nothing
+- **ACON failure loop**: failed tasks whose errors implicate pruned context update
+  per-(tool, chunk-type) scoring guidelines, persisted to PostgreSQL, decaying over time
+- **Transparent MCP proxy**: wraps one or many upstream MCP servers (stdio / Streamable
+  HTTP / SSE), passes through resources and prompts, adaptive per-session budgets
+- **Observability dashboard**: sessions, per-tool stats, kept-vs-pruned chunk diffs,
+  guideline history, and an interactive compression playground
+- **Result caching + inter-call dedup**: identical calls answer in milliseconds; optional
+  mode never re-sends chunks a session has already received
 
 **Target metrics:**
 - 75%+ token reduction per tool call
 - <5 percentage point task completion degradation
-- <80ms P99 latency overhead
+- <80ms P99 latency overhead (warm caches)
 
 ## Quick Start
 
@@ -65,6 +79,36 @@ Traces persist in memory by default. To use PostgreSQL, set
 `CONTEXTMESH_DATABASE_URL` (or `database.url` in `config.yaml`) and run
 `python -m contextmesh.db migrate`. `docker-compose up` brings up
 postgres + migration + gRPC service + dashboard together.
+
+### Use with Claude Code (no API key needed)
+
+Claude Code is an MCP client, so it can consume tools through the
+ContextMesh proxy directly — compression runs locally and Claude Code
+uses your existing login. Drop a `.mcp.json` into your project:
+
+```json
+{
+  "mcpServers": {
+    "contextmesh": {
+      "command": "node",
+      "args": ["<repo>/contextmesh/proxy/mcp_proxy/dist/index.js"],
+      "env": {
+        "CONTEXTMESH_UPSTREAM_COMMAND": "npx -y @modelcontextprotocol/server-filesystem <your-project-dir>",
+        "CONTEXTMESH_GRPC_HOST": "localhost",
+        "CONTEXTMESH_GRPC_PORT": "50051",
+        "CONTEXTMESH_DEFAULT_BUDGET_TOKENS": "2000"
+      }
+    }
+  }
+}
+```
+
+Keep `python grpc_server.py` running, restart Claude Code in that
+directory, approve the server, and file reads made through the
+contextmesh tools come back compressed (check `_meta.contextmesh` for
+the ratio). The same pattern works for any MCP-compatible agent.
+Multi-upstream and Streamable HTTP modes are documented in
+[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
 ### SDK usage (custom agent loops)
 
@@ -133,12 +177,13 @@ Agent -> MCP Proxy -> Upstream Tool Server(s) -> raw output
 
 ## Documentation
 
-- [Knowledge Graph](.opencode/KNOWLEDGE_GRAPH.md) - Component relationships, implementation state, and known limitations
+- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) - Components, endpoints, ports, configuration, and performance notes
 - [CONTRIBUTING.md](CONTRIBUTING.md) - Development guidelines
 
 ## Research Foundation
 
-ContextMesh implements two research contributions:
+ContextMesh implements two research directions, as cited in the
+original project specification:
 
 1. **Squeez** (arXiv:2604.04979, 2026): Task-conditioned extractive pruning for mixed-format tool output
 2. **ACON** (arXiv:2510.00615, 2025): Failure-driven guideline optimization for context compression

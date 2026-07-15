@@ -40,7 +40,8 @@ jobs:
         with:
           path: ~/.cache/huggingface
           key: hf-bge-small-en-v1.5
-      - run: pip install -e ".[dev,embeddings,dashboard]" httpx
+      # httpx2 keeps newer starlette TestClient happy; httpx covers older.
+      - run: pip install -e ".[dev,embeddings,dashboard]" httpx httpx2
       - name: Schema migration against live PostgreSQL
         run: python -m contextmesh.db migrate
         env:
