@@ -1,53 +1,50 @@
-"""PostgreSQL schema for ContextMesh feedback and trace storage.
-
-This schema supports:
-- compression_traces: Every compression event for analysis
-- extraction_guidelines: ACON-learned score multipliers
-- sessions: Agent session tracking
-- guideline_history: Audit trail for guideline changes
-"""
+-- PostgreSQL schema for ContextMesh feedback and trace storage.
+--
+-- Supports:
+--   compression_traces:    every compression event, for ACON analysis
+--   extraction_guidelines: ACON-learned score multipliers
+--   guideline_history:     audit trail for guideline changes
+--   task_outcomes:         agent-reported task outcomes
+--   failed_tasks:          failure-analysis work queue
+--
+-- Session and task identifiers are agent-supplied opaque strings, so
+-- they are stored as TEXT (not UUID foreign keys).
+--
+-- The vector extension is optional: the embedding column is only used
+-- for task-similarity analysis. contextmesh.db.migrate() tolerates a
+-- failed CREATE EXTENSION and skips the vector column/index.
 
 CREATE EXTENSION IF NOT EXISTS vector;
 
-CREATE TYPE outcome_type AS ENUM ('success', 'failed', 'unknown');
-CREATE TYPE chunk_format AS ENUM ('code', 'json', 'log', 'html', 'csv', 'shell', 'text');
-
-CREATE TABLE IF NOT EXISTS sessions (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    task_description TEXT NOT NULL,
-    agent_id TEXT,
-    metadata JSONB DEFAULT '{}'
-);
-
 CREATE TABLE IF NOT EXISTS compression_traces (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    session_id UUID NOT NULL REFERENCES sessions(id) ON DELETE CASCADE,
+    id TEXT PRIMARY KEY,
+    session_id TEXT NOT NULL,
     task_id TEXT NOT NULL,
     tool_name TEXT NOT NULL,
     tool_args_hash TEXT,
-    chunk_ids_selected UUID[] NOT NULL,
-    chunk_ids_pruned UUID[] NOT NULL,
+    chunk_ids_selected TEXT[] NOT NULL DEFAULT '{}',
+    chunk_ids_pruned TEXT[] NOT NULL DEFAULT '{}',
     original_token_count INTEGER NOT NULL,
     compressed_token_count INTEGER NOT NULL,
     compression_ratio REAL NOT NULL,
-    task_description_embedding VECTOR(384),
-    chunk_types_selected TEXT[] NOT NULL,
-    chunk_types_pruned TEXT[] NOT NULL,
+    chunk_types_selected TEXT[] NOT NULL DEFAULT '{}',
+    chunk_types_pruned TEXT[] NOT NULL DEFAULT '{}',
+    low_signal BOOLEAN NOT NULL DEFAULT FALSE,
+    metadata JSONB DEFAULT '{}',
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
 
     CONSTRAINT compression_ratio_check CHECK (compression_ratio >= 0 AND compression_ratio <= 1)
 );
 
-CREATE INDEX idx_traces_session_id ON compression_traces(session_id);
-CREATE INDEX idx_traces_task_id ON compression_traces(task_id);
-CREATE INDEX idx_traces_tool_name ON compression_traces(tool_name);
-CREATE INDEX idx_traces_created_at ON compression_traces(created_at);
-CREATE INDEX idx_traces_embedding ON compression_traces USING ivfflat (task_description_embedding vector_cosine_ops);
+CREATE INDEX IF NOT EXISTS idx_traces_session_id ON compression_traces(session_id);
+CREATE INDEX IF NOT EXISTS idx_traces_task_id ON compression_traces(task_id);
+CREATE INDEX IF NOT EXISTS idx_traces_tool_name ON compression_traces(tool_name);
+CREATE INDEX IF NOT EXISTS idx_traces_created_at ON compression_traces(created_at);
+
+ALTER TABLE compression_traces ADD COLUMN IF NOT EXISTS task_description_embedding VECTOR(384);
 
 CREATE TABLE IF NOT EXISTS extraction_guidelines (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id TEXT PRIMARY KEY,
     tool_name TEXT NOT NULL,
     chunk_type TEXT NOT NULL,
     score_multiplier REAL NOT NULL DEFAULT 1.0,
@@ -60,12 +57,12 @@ CREATE TABLE IF NOT EXISTS extraction_guidelines (
     CONSTRAINT multiplier_range CHECK (score_multiplier >= 1.0 AND score_multiplier <= 3.0)
 );
 
-CREATE INDEX idx_guidelines_tool ON extraction_guidelines(tool_name);
-CREATE INDEX idx_guidelines_multiplier ON extraction_guidelines(score_multiplier);
+CREATE INDEX IF NOT EXISTS idx_guidelines_tool ON extraction_guidelines(tool_name);
 
 CREATE TABLE IF NOT EXISTS guideline_history (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    guideline_id UUID NOT NULL REFERENCES extraction_guidelines(id) ON DELETE CASCADE,
+    id TEXT PRIMARY KEY,
+    tool_name TEXT NOT NULL,
+    chunk_type TEXT NOT NULL,
     old_multiplier REAL NOT NULL,
     new_multiplier REAL NOT NULL,
     trigger_task_id TEXT,
@@ -73,59 +70,35 @@ CREATE TABLE IF NOT EXISTS guideline_history (
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
-CREATE INDEX idx_history_guideline ON guideline_history(guideline_id);
-CREATE INDEX idx_history_created ON guideline_history(created_at);
+CREATE INDEX IF NOT EXISTS idx_history_tool_chunk ON guideline_history(tool_name, chunk_type);
+CREATE INDEX IF NOT EXISTS idx_history_created ON guideline_history(created_at);
 
 CREATE TABLE IF NOT EXISTS task_outcomes (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id TEXT PRIMARY KEY,
     task_id TEXT NOT NULL UNIQUE,
-    session_id UUID REFERENCES sessions(id) ON DELETE SET NULL,
-    outcome outcome_type NOT NULL,
+    session_id TEXT,
+    outcome TEXT NOT NULL CHECK (outcome IN ('success', 'failed', 'unknown')),
     failure_reason TEXT,
     evaluation_score REAL,
     agent_final_output TEXT,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
-CREATE INDEX idx_outcomes_task_id ON task_outcomes(task_id);
-CREATE INDEX idx_outcomes_session ON task_outcomes(session_id);
-CREATE INDEX idx_outcomes_created ON task_outcomes(created_at);
+CREATE INDEX IF NOT EXISTS idx_outcomes_task_id ON task_outcomes(task_id);
+CREATE INDEX IF NOT EXISTS idx_outcomes_session ON task_outcomes(session_id);
 
 CREATE TABLE IF NOT EXISTS failed_tasks (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id TEXT PRIMARY KEY,
     task_id TEXT NOT NULL,
-    session_id UUID REFERENCES sessions(id) ON DELETE CASCADE,
+    session_id TEXT,
     failure_reason TEXT NOT NULL,
-    root_cause_chunks UUID[],
+    compression_implicated BOOLEAN NOT NULL DEFAULT FALSE,
+    root_cause_chunks TEXT[],
     root_cause_chunk_types TEXT[],
     analysis_completed BOOLEAN NOT NULL DEFAULT FALSE,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     completed_at TIMESTAMPTZ
 );
 
-CREATE INDEX idx_failed_tasks_session ON failed_tasks(session_id);
-CREATE INDEX idx_failed_tasks_analysis ON failed_tasks(analysis_completed);
-
-CREATE OR REPLACE FUNCTION update_session_timestamp()
-RETURNS TRIGGER AS $$
-BEGIN
-    NEW.updated_at = NOW();
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER session_update_trigger
-    BEFORE UPDATE ON sessions
-    FOR EACH ROW
-    EXECUTE FUNCTION update_session_timestamp();
-
-CREATE OR REPLACE FUNCTION decay_guideline_multipliers()
-RETURNS void AS $$
-BEGIN
-    UPDATE extraction_guidelines
-    SET score_multiplier = GREATEST(1.0, score_multiplier * 0.95),
-        last_updated = NOW()
-    WHERE score_multiplier > 1.0
-      AND last_updated < NOW() - INTERVAL '30 days';
-END;
-$$ LANGUAGE plpgsql;
+CREATE INDEX IF NOT EXISTS idx_failed_tasks_session ON failed_tasks(session_id);
+CREATE INDEX IF NOT EXISTS idx_failed_tasks_analysis ON failed_tasks(analysis_completed);
