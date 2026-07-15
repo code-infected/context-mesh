@@ -4,6 +4,8 @@ interface SessionData {
   sessionId: string;
   taskDescription: string;
   recentSteps: string[];
+  /** Cumulative compressed tokens returned to the agent this session. */
+  compressedTokensUsed: number;
   createdAt: Date;
   lastAccessedAt: Date;
 }
@@ -30,6 +32,7 @@ export class SessionManager {
       sessionId,
       taskDescription,
       recentSteps: [],
+      compressedTokensUsed: 0,
       createdAt: now,
       lastAccessedAt: now,
     };
@@ -81,6 +84,18 @@ export class SessionManager {
       }
       session.lastAccessedAt = new Date();
     }
+  }
+
+  addCompressedTokens(sessionId: string, tokens: number): void {
+    const session = this.sessions.get(sessionId);
+    if (session && Number.isFinite(tokens) && tokens > 0) {
+      session.compressedTokensUsed += tokens;
+      session.lastAccessedAt = new Date();
+    }
+  }
+
+  getCompressedTokensUsed(sessionId: string): number {
+    return this.sessions.get(sessionId)?.compressedTokensUsed ?? 0;
   }
 
   getTaskContext(sessionId?: string): TaskContext | null {

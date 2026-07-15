@@ -52,9 +52,16 @@ export class CompressionClient {
     const protoDescriptor = grpc.loadPackageDefinition(packageDefinition);
     const compressionProto = (protoDescriptor as any).contextmesh;
 
+    // Match the server's raised limits: giant tool outputs exceed
+    // gRPC's 4MB default message size.
+    const messageLimit = 64 * 1024 * 1024;
     this.client = new compressionProto.CompressionService(
       `${host}:${port}`,
-      grpc.credentials.createInsecure()
+      grpc.credentials.createInsecure(),
+      {
+        "grpc.max_receive_message_length": messageLimit,
+        "grpc.max_send_message_length": messageLimit,
+      }
     );
   }
 

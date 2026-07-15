@@ -25,8 +25,7 @@ from typing import Any
 
 import grpc
 
-from contextmesh.grpc import compression_pb2
-from contextmesh.grpc import compression_pb2_grpc
+from contextmesh.grpc import compression_pb2, compression_pb2_grpc
 
 logger = logging.getLogger(__name__)
 

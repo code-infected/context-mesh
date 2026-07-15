@@ -26,8 +26,7 @@ import grpc
 
 from contextmesh.core.chunker.base import CompressionInput
 from contextmesh.core.pipeline import CompressionPipeline
-from contextmesh.grpc import compression_pb2
-from contextmesh.grpc import compression_pb2_grpc
+from contextmesh.grpc import compression_pb2, compression_pb2_grpc
 
 logger = logging.getLogger(__name__)
 
@@ -43,9 +42,24 @@ class CompressionServicer(compression_pb2_grpc.CompressionServiceServicer):
         """Initialize compression servicer.
 
         Args:
-            pipeline: Optional pipeline override.
+            pipeline: Optional pipeline override; when omitted, one is
+                built from config.yaml/env with tracing enabled.
         """
-        self.pipeline = pipeline or CompressionPipeline()
+        from contextmesh.config import load_config
+
+        self.config = load_config()
+        if pipeline is None:
+            from contextmesh.config import create_pipeline
+            from contextmesh.feedback.trace_store import TraceStore
+
+            pipeline = create_pipeline(self.config)
+            pipeline.trace_store = TraceStore(
+                database_url=self.config.database_url,
+                batch_size=int(
+                    self.config.get("feedback", "trace_batch_size", default=100)
+                ),
+            )
+        self.pipeline = pipeline
 
     def Compress(
         self,
@@ -72,7 +86,8 @@ class CompressionServicer(compression_pb2_grpc.CompressionServiceServicer):
                 raw_output=request.raw_output,
                 task_description=request.task_description,
                 recent_steps=list(request.recent_steps),
-                budget_tokens=request.budget_tokens or 8000,
+                budget_tokens=request.budget_tokens
+                or self.config.budget_for_tool(request.tool_name),
             )
 
             result = self.pipeline.compress(inp)
@@ -143,7 +158,15 @@ def create_server(
     Returns:
         Configured gRPC server.
     """
-    server = grpc.server(futures.ThreadPoolExecutor(max_workers=max_workers))
+    # Giant tool outputs (DB dumps, big files) exceed gRPC's 4MB default.
+    message_limit = 64 * 1024 * 1024
+    server = grpc.server(
+        futures.ThreadPoolExecutor(max_workers=max_workers),
+        options=[
+            ("grpc.max_receive_message_length", message_limit),
+            ("grpc.max_send_message_length", message_limit),
+        ],
+    )
     servicer = CompressionServicer()
     compression_pb2_grpc.add_CompressionServiceServicer_to_server(servicer, server)
     server.add_insecure_port(f"[::]:{port}")

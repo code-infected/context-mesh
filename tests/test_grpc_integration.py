@@ -9,17 +9,15 @@ Usage:
 
 from __future__ import annotations
 
-import threading
 import time
 import unittest
-
-from contextmesh.grpc.client import CompressionClient
-from contextmesh.grpc.compression_pb2_grpc import add_CompressionServiceServicer_to_server
-from contextmesh.grpc.compression_pb2 import HealthRequest
-from contextmesh.core.pipeline import CompressionPipeline
+from concurrent import futures
 
 import grpc
-from concurrent import futures
+
+from contextmesh.core.pipeline import CompressionPipeline
+from contextmesh.grpc.client import CompressionClient
+from contextmesh.grpc.compression_pb2_grpc import add_CompressionServiceServicer_to_server
 
 
 class TestGrpcIntegration(unittest.TestCase):
@@ -29,7 +27,6 @@ class TestGrpcIntegration(unittest.TestCase):
     def setUpClass(cls) -> None:
         """Start gRPC server for tests."""
         from contextmesh.grpc.compression_pb2_grpc import CompressionServiceServicer
-        from contextmesh.grpc import compression_pb2_grpc
 
         cls.port = 50052
         cls.pipeline = CompressionPipeline()
@@ -39,8 +36,9 @@ class TestGrpcIntegration(unittest.TestCase):
                 pass
 
             def Compress(self, request, context):
-                from contextmesh.core.chunker.base import CompressionInput
                 import json
+
+                from contextmesh.core.chunker.base import CompressionInput
 
                 try:
                     tool_args = json.loads(request.tool_args_json) if request.tool_args_json else {}
