@@ -1,0 +1,50 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Chart chrome & ink tokens (light / dark), per the dashboard's validated
+ * reference palette. Series colors live in src/theme.tsx so Recharts receives
+ * concrete hex values; everything here is chrome (surfaces, ink, hairlines).
+ */
+:root {
+  color-scheme: light;
+  --cm-page: #f9f9f7;
+  --cm-surface: #fcfcfb;
+  --cm-ink: #0b0b0b;
+  --cm-ink-2: #52514e;
+  --cm-ink-3: #898781;
+  --cm-grid: #e1e0d9;
+  --cm-axis: #c3c2b7;
+  --cm-hairline: rgba(11, 11, 11, 0.1);
+  --cm-accent: #2a78d6;
+  --cm-accent-soft: rgba(42, 120, 214, 0.1);
+}
+
+.dark {
+  color-scheme: dark;
+  --cm-page: #0d0d0d;
+  --cm-surface: #1a1a19;
+  --cm-ink: #ffffff;
+  --cm-ink-2: #c3c2b7;
+  --cm-ink-3: #898781;
+  --cm-grid: #2c2c2a;
+  --cm-axis: #383835;
+  --cm-hairline: rgba(255, 255, 255, 0.1);
+  --cm-accent: #3987e5;
+  --cm-accent-soft: rgba(57, 135, 229, 0.14);
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background-color: var(--cm-page);
+  color: var(--cm-ink);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}

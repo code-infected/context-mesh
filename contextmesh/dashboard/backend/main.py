@@ -3,56 +3,55 @@
 Provides REST API endpoints for:
 - Session management and tracing
 - Compression statistics per tool
-- ACON guideline history
+- ACON guideline state and history
 - Failure analysis
+- Compression (used by SDKs and as the MCP proxy's HTTP fallback)
+
+Run:
+    uvicorn contextmesh.dashboard.backend.main:app --port 8082
 """
 
 from __future__ import annotations
 
+import hmac
 import logging
+import os
+import time
+from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
+from pathlib import Path
 from typing import Any
 
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
+from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
+
+from contextmesh.dashboard.backend.routers import (
+    compress,
+    failures,
+    guidelines,
+    sessions,
+    tools,
+)
+from contextmesh.dashboard.backend.state import get_state
 
 logger = logging.getLogger(__name__)
 
 
-class TaskOutcomeRequest(BaseModel):
-    """Request body for task outcome reporting."""
-
-    task_id: str
-    session_id: str | None = None
-    outcome: str
-    failure_reason: str | None = None
-    agent_final_output: str | None = None
-    evaluation_score: float | None = None
-
-
-class CompressRequest(BaseModel):
-    """Request body for compression endpoint."""
-
-    session_id: str
-    task_id: str
-    tool_name: str
-    tool_args: dict[str, Any] = {}
-    raw_output: str
-    task_description: str
-    recent_steps: list[str] = []
-    budget_tokens: int = 8000
-
-
 @asynccontextmanager
-async def lifespan(app: FastAPI):
-    """Application lifespan handler.
-
-    Initializes database connections on startup,
-    closes them on shutdown.
-    """
-    logger.info("Starting ContextMesh dashboard backend")
+async def lifespan(app: FastAPI) -> AsyncIterator[None]:
+    """Initialize shared state on startup, flush traces on shutdown."""
+    state = get_state()
+    logger.info(
+        "ContextMesh dashboard backend starting (trace backend: %s)",
+        state.trace_store.backend_name,
+    )
+    state.start_decay_scheduler()
     yield
-    logger.info("Shutting down ContextMesh dashboard backend")
+    state.stop_decay_scheduler()
+    state.trace_store.flush()
+    logger.info("ContextMesh dashboard backend stopped")
 
 
 app = FastAPI(
@@ -62,121 +61,77 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-
-@app.get("/api/sessions")
-async def list_sessions() -> dict[str, list[dict[str, Any]]]:
-    """List sessions with compression stats.
-
-    Returns:
-        Dictionary with sessions list.
-    """
-    return {"sessions": []}
+# The React dev server (vite, port 3000) calls the API cross-origin.
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
-@app.get("/api/sessions/{session_id}/traces")
-async def get_session_traces(session_id: str) -> dict[str, list[dict[str, Any]]]:
-    """Get all compression traces for a session.
-
-    Args:
-        session_id: Session identifier.
-
-    Returns:
-        Dictionary with traces list.
-    """
-    return {"traces": []}
-
-
-@app.get("/api/tools/stats")
-async def get_tool_stats() -> dict[str, dict[str, float]]:
-    """Get per-tool compression statistics.
-
-    Returns:
-        Dictionary of tool_name -> stats.
-    """
-    return {}
+# Optional bearer auth: set CONTEXTMESH_DASHBOARD_API_TOKEN to require
+# `Authorization: Bearer <token>` on every API endpoint except health.
+@app.middleware("http")
+async def bearer_auth(request: Request, call_next: Any) -> Any:
+    token = os.environ.get("CONTEXTMESH_DASHBOARD_API_TOKEN")
+    if (
+        token
+        and request.url.path.startswith("/api/")
+        and request.url.path != "/api/health"
+    ):
+        supplied = request.headers.get("authorization", "")
+        expected = f"Bearer {token}"
+        if not hmac.compare_digest(supplied, expected):
+            return JSONResponse(status_code=401, content={"detail": "Unauthorized"})
+    return await call_next(request)
 
 
-@app.get("/api/guidelines")
-async def get_guidelines() -> dict[str, list[dict[str, Any]]]:
-    """Get current extraction guidelines with history.
-
-    Returns:
-        Dictionary with guidelines list.
-    """
-    return {"guidelines": []}
-
-
-@app.get("/api/failures")
-async def get_failures() -> dict[str, list[dict[str, Any]]]:
-    """Get tasks flagged by failure detector.
-
-    Returns:
-        Dictionary with failures list.
-    """
-    return {"failures": []}
-
-
-@app.post("/api/tasks/{task_id}/outcome")
-async def report_task_outcome(
-    task_id: str,
-    request: TaskOutcomeRequest,
-) -> dict[str, str]:
-    """Report task outcome for ACON feedback loop.
-
-    Args:
-        task_id: Task identifier.
-        request: Task outcome data.
-
-    Returns:
-        Success message.
-    """
-    logger.info(f"Task outcome reported: {task_id} -> {request.outcome}")
-    return {"status": "ok"}
-
-
-@app.post("/api/compress")
-async def compress(request: CompressRequest) -> dict[str, Any]:
-    """Compress tool output.
-
-    Args:
-        request: Compression request data.
-
-    Returns:
-        Compression result.
-    """
-    from contextmesh.core.chunker.base import CompressionInput
-    from contextmesh.core.pipeline import CompressionPipeline
-
-    inp = CompressionInput(
-        session_id=request.session_id,
-        task_id=request.task_id,
-        tool_name=request.tool_name,
-        tool_args=request.tool_args,
-        raw_output=request.raw_output,
-        task_description=request.task_description,
-        recent_steps=request.recent_steps,
-        budget_tokens=request.budget_tokens,
+@app.middleware("http")
+async def request_timing(request: Request, call_next: Any) -> Any:
+    """Log API request timings (skips static assets)."""
+    if not request.url.path.startswith("/api/"):
+        return await call_next(request)
+    start = time.monotonic()
+    response = await call_next(request)
+    elapsed_ms = (time.monotonic() - start) * 1000
+    logger.info(
+        "%s %s -> %d (%.1fms)",
+        request.method, request.url.path, response.status_code, elapsed_ms,
     )
+    response.headers["X-Response-Time-Ms"] = f"{elapsed_ms:.1f}"
+    return response
 
-    pipeline = CompressionPipeline()
-    result = pipeline.compress(inp)
-
-    return {
-        "compressed_output": result.compressed_output,
-        "original_tokens": result.original_tokens,
-        "compressed_tokens": result.compressed_tokens,
-        "compression_ratio": result.compression_ratio,
-        "chunks_selected": result.chunks_selected,
-        "chunks_total": result.chunks_total,
-        "chunk_types_selected": result.chunk_types_selected,
-    }
+app.include_router(sessions.router)
+app.include_router(tools.router)
+app.include_router(guidelines.router)
+app.include_router(failures.router)
+app.include_router(compress.router)
 
 
 @app.get("/api/health")
-async def health_check() -> dict[str, str]:
-    """Health check endpoint.
+async def health_check() -> dict[str, Any]:
+    """Health check with store stats."""
+    state = get_state()
+    stats = state.trace_store.get_stats()
+    return {
+        "status": "ok",
+        "traces_stored": stats.get("trace_count", 0),
+        "sessions": stats.get("sessions", 0),
+        "trace_backend": state.trace_store.backend_name,
+    }
 
-    Returns:
-        Health status.
-    """
-    return {"status": "healthy"}
+
+@app.get("/api/stats/overview")
+async def stats_overview() -> dict[str, Any]:
+    """Aggregate dashboard KPIs in a single call."""
+    return get_state().overview()
+
+
+# Serve the built React dashboard when it exists (single-origin deploy:
+# `npm run build` in dashboard/frontend, then only the backend runs).
+# Mounted last so /api routes take precedence.
+_FRONTEND_DIST = Path(__file__).resolve().parents[1] / "frontend" / "dist"
+if _FRONTEND_DIST.is_dir():
+    app.mount("/", StaticFiles(directory=str(_FRONTEND_DIST), html=True), name="frontend")
+    logger.info("Serving dashboard frontend from %s", _FRONTEND_DIST)
