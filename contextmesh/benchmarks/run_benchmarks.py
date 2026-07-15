@@ -203,7 +203,7 @@ def run_benchmark() -> BenchmarkMetrics:
         logger.info(f"[{i}/{len(TEST_CASES)}] Running: {case['name']}")
 
         content = load_fixture(case["name"])
-        original_tokens = len(content) // 4
+        _original_tokens = len(content) // 4
 
         inp = CompressionInput(
             session_id="benchmark-session",

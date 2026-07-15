@@ -1,0 +1,52 @@
+{
+  "tasks": [
+    {
+      "id": "auth-expired-token",
+      "question": "What exact string does verify_token_expiry return when a token is expired? Look in auth_service.py.",
+      "target_file": "auth_service.py",
+      "answer_regex": "TOKEN_EXPIRED_ERR_4471"
+    },
+    {
+      "id": "auth-lockout-limit",
+      "question": "How many login attempts are allowed before lockout, per the constant in auth_service.py?",
+      "target_file": "auth_service.py",
+      "answer_regex": "\\b7\\b"
+    },
+    {
+      "id": "order-4217-status",
+      "question": "What is the status of order 4217 in orders.json?",
+      "target_file": "orders.json",
+      "answer_regex": "refunded"
+    },
+    {
+      "id": "orders-warehouse",
+      "question": "Which warehouse generated orders.json?",
+      "target_file": "orders.json",
+      "answer_regex": "EU-CENTRAL"
+    },
+    {
+      "id": "deploy-root-cause",
+      "question": "What caused the deploy failure on 2026-07-01, per deploy.log?",
+      "target_file": "deploy.log",
+      "answer_regex": "disk quota exceeded"
+    },
+    {
+      "id": "deploy-aborted-release",
+      "question": "Which release version rollout was aborted in deploy.log?",
+      "target_file": "deploy.log",
+      "answer_regex": "v2\\.14\\.3"
+    },
+    {
+      "id": "arch-database",
+      "question": "Which database and extension does architecture.md say relational state lives in?",
+      "target_file": "architecture.md",
+      "answer_regex": "PostgreSQL 16.*pgvector|pgvector.*PostgreSQL 16"
+    },
+    {
+      "id": "arch-mtls-rotation",
+      "question": "How often are mTLS certificates rotated, per architecture.md?",
+      "target_file": "architecture.md",
+      "answer_regex": "30 days"
+    }
+  ]
+}

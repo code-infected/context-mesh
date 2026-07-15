@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   postgres:
     image: pgvector/pgvector:pg16
@@ -17,6 +15,18 @@ services:
       timeout: 5s
       retries: 5
 
+  migrate:
+    build:
+      context: .
+      dockerfile: Dockerfile.core
+    command: ["python", "-m", "contextmesh.db", "migrate"]
+    environment:
+      CONTEXTMESH_DATABASE_URL: postgresql://contextmesh:contextmesh@postgres:5432/contextmesh
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: "no"
+
   compression_service:
     build:
       context: .
@@ -26,21 +36,30 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
     ports:
       - "50051:50051"
 
+  # The proxy speaks MCP over stdio; attach an agent with
+  #   docker compose run --rm mcp_proxy
+  # after setting CONTEXTMESH_UPSTREAM (SSE URL) or
+  # CONTEXTMESH_UPSTREAM_COMMAND (stdio command) in the environment.
   mcp_proxy:
     build:
       context: .
       dockerfile: Dockerfile.proxy
+    stdin_open: true
     environment:
       CONTEXTMESH_COMPRESSION_GRPC_HOST: compression_service
       CONTEXTMESH_COMPRESSION_GRPC_PORT: "50051"
+      CONTEXTMESH_UPSTREAM: ${CONTEXTMESH_UPSTREAM:-}
+      CONTEXTMESH_UPSTREAM_COMMAND: ${CONTEXTMESH_UPSTREAM_COMMAND:-}
+      CONTEXTMESH_TOOL_BUDGETS: ${CONTEXTMESH_TOOL_BUDGETS:-}
     depends_on:
       compression_service:
         condition: service_started
-    ports:
-      - "8081:8081"
+    profiles: ["proxy"]
 
   dashboard:
     build:

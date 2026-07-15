@@ -1,0 +1,91 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install ruff
+      - run: ruff check contextmesh grpc_server.py tests
+
+  python-tests:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_DB: contextmesh
+          POSTGRES_USER: contextmesh
+          POSTGRES_PASSWORD: contextmesh
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U contextmesh"
+          --health-interval 10s --health-timeout 5s --health-retries 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Cache embedding model
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/huggingface
+          key: hf-bge-small-en-v1.5
+      - run: pip install -e ".[dev,embeddings,dashboard]" httpx
+      - name: Schema migration against live PostgreSQL
+        run: python -m contextmesh.db migrate
+        env:
+          CONTEXTMESH_DATABASE_URL: postgresql://contextmesh:contextmesh@localhost:5432/contextmesh
+      - name: Tests
+        run: pytest tests -q
+        env:
+          # Keep the trace store in memory for tests; the migrate step
+          # above is the schema's integration check.
+          CONTEXTMESH_DATABASE_URL: ""
+
+  proxy-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: contextmesh/proxy/mcp_proxy/package.json
+      - run: npm install
+        working-directory: contextmesh/proxy/mcp_proxy
+      - run: npm run build
+        working-directory: contextmesh/proxy/mcp_proxy
+
+  sdk-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install
+        working-directory: contextmesh/proxy/sdk/typescript
+      - run: npm run build
+        working-directory: contextmesh/proxy/sdk/typescript
+
+  frontend-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install
+        working-directory: contextmesh/dashboard/frontend
+      - run: npm run build
+        working-directory: contextmesh/dashboard/frontend

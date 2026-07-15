@@ -1,0 +1,4626 @@
+{
+ "orders": [
+  {
+   "order_id": 4100,
+   "customer": "customer_0",
+   "status": "shipped",
+   "total_usd": 111.0,
+   "items": [
+    {
+     "sku": "SKU-4100-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4100-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4100-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4101,
+   "customer": "customer_1",
+   "status": "processing",
+   "total_usd": 114.5,
+   "items": [
+    {
+     "sku": "SKU-4101-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4101-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4101-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4102,
+   "customer": "customer_2",
+   "status": "delivered",
+   "total_usd": 118.0,
+   "items": [
+    {
+     "sku": "SKU-4102-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4102-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4102-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4103,
+   "customer": "customer_3",
+   "status": "cancelled",
+   "total_usd": 121.5,
+   "items": [
+    {
+     "sku": "SKU-4103-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4103-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4103-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4104,
+   "customer": "customer_4",
+   "status": "shipped",
+   "total_usd": 125.0,
+   "items": [
+    {
+     "sku": "SKU-4104-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4104-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4104-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4105,
+   "customer": "customer_5",
+   "status": "processing",
+   "total_usd": 128.5,
+   "items": [
+    {
+     "sku": "SKU-4105-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4105-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4105-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4106,
+   "customer": "customer_6",
+   "status": "delivered",
+   "total_usd": 132.0,
+   "items": [
+    {
+     "sku": "SKU-4106-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4106-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4106-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4107,
+   "customer": "customer_7",
+   "status": "cancelled",
+   "total_usd": 135.5,
+   "items": [
+    {
+     "sku": "SKU-4107-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4107-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4107-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4108,
+   "customer": "customer_8",
+   "status": "shipped",
+   "total_usd": 139.0,
+   "items": [
+    {
+     "sku": "SKU-4108-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4108-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4108-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4109,
+   "customer": "customer_9",
+   "status": "processing",
+   "total_usd": 142.5,
+   "items": [
+    {
+     "sku": "SKU-4109-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4109-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4109-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4110,
+   "customer": "customer_10",
+   "status": "delivered",
+   "total_usd": 146.0,
+   "items": [
+    {
+     "sku": "SKU-4110-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4110-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4110-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4111,
+   "customer": "customer_11",
+   "status": "cancelled",
+   "total_usd": 149.5,
+   "items": [
+    {
+     "sku": "SKU-4111-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4111-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4111-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4112,
+   "customer": "customer_12",
+   "status": "shipped",
+   "total_usd": 153.0,
+   "items": [
+    {
+     "sku": "SKU-4112-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4112-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4112-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4113,
+   "customer": "customer_13",
+   "status": "processing",
+   "total_usd": 156.5,
+   "items": [
+    {
+     "sku": "SKU-4113-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4113-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4113-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4114,
+   "customer": "customer_14",
+   "status": "delivered",
+   "total_usd": 160.0,
+   "items": [
+    {
+     "sku": "SKU-4114-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4114-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4114-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4115,
+   "customer": "customer_15",
+   "status": "cancelled",
+   "total_usd": 163.5,
+   "items": [
+    {
+     "sku": "SKU-4115-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4115-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4115-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4116,
+   "customer": "customer_16",
+   "status": "shipped",
+   "total_usd": 167.0,
+   "items": [
+    {
+     "sku": "SKU-4116-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4116-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4116-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4117,
+   "customer": "customer_17",
+   "status": "processing",
+   "total_usd": 170.5,
+   "items": [
+    {
+     "sku": "SKU-4117-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4117-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4117-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4118,
+   "customer": "customer_18",
+   "status": "delivered",
+   "total_usd": 174.0,
+   "items": [
+    {
+     "sku": "SKU-4118-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4118-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4118-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4119,
+   "customer": "customer_19",
+   "status": "cancelled",
+   "total_usd": 177.5,
+   "items": [
+    {
+     "sku": "SKU-4119-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4119-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4119-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4120,
+   "customer": "customer_20",
+   "status": "shipped",
+   "total_usd": 181.0,
+   "items": [
+    {
+     "sku": "SKU-4120-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4120-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4120-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4121,
+   "customer": "customer_21",
+   "status": "processing",
+   "total_usd": 184.5,
+   "items": [
+    {
+     "sku": "SKU-4121-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4121-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4121-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4122,
+   "customer": "customer_22",
+   "status": "delivered",
+   "total_usd": 188.0,
+   "items": [
+    {
+     "sku": "SKU-4122-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4122-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4122-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4123,
+   "customer": "customer_23",
+   "status": "cancelled",
+   "total_usd": 191.5,
+   "items": [
+    {
+     "sku": "SKU-4123-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4123-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4123-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4124,
+   "customer": "customer_24",
+   "status": "shipped",
+   "total_usd": 195.0,
+   "items": [
+    {
+     "sku": "SKU-4124-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4124-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4124-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4125,
+   "customer": "customer_25",
+   "status": "processing",
+   "total_usd": 198.5,
+   "items": [
+    {
+     "sku": "SKU-4125-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4125-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4125-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4126,
+   "customer": "customer_26",
+   "status": "delivered",
+   "total_usd": 202.0,
+   "items": [
+    {
+     "sku": "SKU-4126-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4126-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4126-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4127,
+   "customer": "customer_27",
+   "status": "cancelled",
+   "total_usd": 205.5,
+   "items": [
+    {
+     "sku": "SKU-4127-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4127-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4127-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4128,
+   "customer": "customer_28",
+   "status": "shipped",
+   "total_usd": 209.0,
+   "items": [
+    {
+     "sku": "SKU-4128-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4128-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4128-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4129,
+   "customer": "customer_29",
+   "status": "processing",
+   "total_usd": 212.5,
+   "items": [
+    {
+     "sku": "SKU-4129-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4129-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4129-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4130,
+   "customer": "customer_30",
+   "status": "delivered",
+   "total_usd": 216.0,
+   "items": [
+    {
+     "sku": "SKU-4130-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4130-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4130-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4131,
+   "customer": "customer_31",
+   "status": "cancelled",
+   "total_usd": 219.5,
+   "items": [
+    {
+     "sku": "SKU-4131-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4131-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4131-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4132,
+   "customer": "customer_32",
+   "status": "shipped",
+   "total_usd": 223.0,
+   "items": [
+    {
+     "sku": "SKU-4132-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4132-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4132-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4133,
+   "customer": "customer_33",
+   "status": "processing",
+   "total_usd": 226.5,
+   "items": [
+    {
+     "sku": "SKU-4133-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4133-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4133-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4134,
+   "customer": "customer_34",
+   "status": "delivered",
+   "total_usd": 230.0,
+   "items": [
+    {
+     "sku": "SKU-4134-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4134-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4134-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4135,
+   "customer": "customer_35",
+   "status": "cancelled",
+   "total_usd": 233.5,
+   "items": [
+    {
+     "sku": "SKU-4135-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4135-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4135-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4136,
+   "customer": "customer_36",
+   "status": "shipped",
+   "total_usd": 237.0,
+   "items": [
+    {
+     "sku": "SKU-4136-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4136-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4136-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4137,
+   "customer": "customer_37",
+   "status": "processing",
+   "total_usd": 240.5,
+   "items": [
+    {
+     "sku": "SKU-4137-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4137-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4137-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4138,
+   "customer": "customer_38",
+   "status": "delivered",
+   "total_usd": 244.0,
+   "items": [
+    {
+     "sku": "SKU-4138-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4138-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4138-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4139,
+   "customer": "customer_39",
+   "status": "cancelled",
+   "total_usd": 247.5,
+   "items": [
+    {
+     "sku": "SKU-4139-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4139-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4139-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4140,
+   "customer": "customer_40",
+   "status": "shipped",
+   "total_usd": 251.0,
+   "items": [
+    {
+     "sku": "SKU-4140-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4140-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4140-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4141,
+   "customer": "customer_41",
+   "status": "processing",
+   "total_usd": 254.5,
+   "items": [
+    {
+     "sku": "SKU-4141-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4141-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4141-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4142,
+   "customer": "customer_42",
+   "status": "delivered",
+   "total_usd": 258.0,
+   "items": [
+    {
+     "sku": "SKU-4142-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4142-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4142-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4143,
+   "customer": "customer_43",
+   "status": "cancelled",
+   "total_usd": 261.5,
+   "items": [
+    {
+     "sku": "SKU-4143-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4143-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4143-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4144,
+   "customer": "customer_44",
+   "status": "shipped",
+   "total_usd": 265.0,
+   "items": [
+    {
+     "sku": "SKU-4144-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4144-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4144-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4145,
+   "customer": "customer_45",
+   "status": "processing",
+   "total_usd": 268.5,
+   "items": [
+    {
+     "sku": "SKU-4145-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4145-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4145-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4146,
+   "customer": "customer_46",
+   "status": "delivered",
+   "total_usd": 272.0,
+   "items": [
+    {
+     "sku": "SKU-4146-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4146-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4146-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4147,
+   "customer": "customer_47",
+   "status": "cancelled",
+   "total_usd": 275.5,
+   "items": [
+    {
+     "sku": "SKU-4147-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4147-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4147-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4148,
+   "customer": "customer_48",
+   "status": "shipped",
+   "total_usd": 279.0,
+   "items": [
+    {
+     "sku": "SKU-4148-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4148-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4148-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4149,
+   "customer": "customer_49",
+   "status": "processing",
+   "total_usd": 282.5,
+   "items": [
+    {
+     "sku": "SKU-4149-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4149-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4149-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4150,
+   "customer": "customer_0",
+   "status": "delivered",
+   "total_usd": 286.0,
+   "items": [
+    {
+     "sku": "SKU-4150-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4150-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4150-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4151,
+   "customer": "customer_1",
+   "status": "cancelled",
+   "total_usd": 289.5,
+   "items": [
+    {
+     "sku": "SKU-4151-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4151-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4151-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4152,
+   "customer": "customer_2",
+   "status": "shipped",
+   "total_usd": 293.0,
+   "items": [
+    {
+     "sku": "SKU-4152-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4152-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4152-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4153,
+   "customer": "customer_3",
+   "status": "processing",
+   "total_usd": 296.5,
+   "items": [
+    {
+     "sku": "SKU-4153-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4153-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4153-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4154,
+   "customer": "customer_4",
+   "status": "delivered",
+   "total_usd": 300.0,
+   "items": [
+    {
+     "sku": "SKU-4154-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4154-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4154-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4155,
+   "customer": "customer_5",
+   "status": "cancelled",
+   "total_usd": 303.5,
+   "items": [
+    {
+     "sku": "SKU-4155-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4155-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4155-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4156,
+   "customer": "customer_6",
+   "status": "shipped",
+   "total_usd": 307.0,
+   "items": [
+    {
+     "sku": "SKU-4156-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4156-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4156-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4157,
+   "customer": "customer_7",
+   "status": "processing",
+   "total_usd": 310.5,
+   "items": [
+    {
+     "sku": "SKU-4157-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4157-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4157-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4158,
+   "customer": "customer_8",
+   "status": "delivered",
+   "total_usd": 314.0,
+   "items": [
+    {
+     "sku": "SKU-4158-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4158-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4158-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4159,
+   "customer": "customer_9",
+   "status": "cancelled",
+   "total_usd": 317.5,
+   "items": [
+    {
+     "sku": "SKU-4159-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4159-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4159-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4160,
+   "customer": "customer_10",
+   "status": "shipped",
+   "total_usd": 321.0,
+   "items": [
+    {
+     "sku": "SKU-4160-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4160-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4160-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4161,
+   "customer": "customer_11",
+   "status": "processing",
+   "total_usd": 324.5,
+   "items": [
+    {
+     "sku": "SKU-4161-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4161-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4161-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4162,
+   "customer": "customer_12",
+   "status": "delivered",
+   "total_usd": 328.0,
+   "items": [
+    {
+     "sku": "SKU-4162-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4162-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4162-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4163,
+   "customer": "customer_13",
+   "status": "cancelled",
+   "total_usd": 331.5,
+   "items": [
+    {
+     "sku": "SKU-4163-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4163-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4163-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4164,
+   "customer": "customer_14",
+   "status": "shipped",
+   "total_usd": 335.0,
+   "items": [
+    {
+     "sku": "SKU-4164-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4164-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4164-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4165,
+   "customer": "customer_15",
+   "status": "processing",
+   "total_usd": 338.5,
+   "items": [
+    {
+     "sku": "SKU-4165-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4165-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4165-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4166,
+   "customer": "customer_16",
+   "status": "delivered",
+   "total_usd": 342.0,
+   "items": [
+    {
+     "sku": "SKU-4166-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4166-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4166-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4167,
+   "customer": "customer_17",
+   "status": "cancelled",
+   "total_usd": 345.5,
+   "items": [
+    {
+     "sku": "SKU-4167-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4167-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4167-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4168,
+   "customer": "customer_18",
+   "status": "shipped",
+   "total_usd": 349.0,
+   "items": [
+    {
+     "sku": "SKU-4168-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4168-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4168-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4169,
+   "customer": "customer_19",
+   "status": "processing",
+   "total_usd": 352.5,
+   "items": [
+    {
+     "sku": "SKU-4169-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4169-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4169-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4170,
+   "customer": "customer_20",
+   "status": "delivered",
+   "total_usd": 356.0,
+   "items": [
+    {
+     "sku": "SKU-4170-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4170-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4170-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4171,
+   "customer": "customer_21",
+   "status": "cancelled",
+   "total_usd": 20.0,
+   "items": [
+    {
+     "sku": "SKU-4171-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4171-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4171-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4172,
+   "customer": "customer_22",
+   "status": "shipped",
+   "total_usd": 23.5,
+   "items": [
+    {
+     "sku": "SKU-4172-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4172-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4172-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4173,
+   "customer": "customer_23",
+   "status": "processing",
+   "total_usd": 27.0,
+   "items": [
+    {
+     "sku": "SKU-4173-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4173-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4173-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4174,
+   "customer": "customer_24",
+   "status": "delivered",
+   "total_usd": 30.5,
+   "items": [
+    {
+     "sku": "SKU-4174-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4174-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4174-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4175,
+   "customer": "customer_25",
+   "status": "cancelled",
+   "total_usd": 34.0,
+   "items": [
+    {
+     "sku": "SKU-4175-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4175-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4175-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4176,
+   "customer": "customer_26",
+   "status": "shipped",
+   "total_usd": 37.5,
+   "items": [
+    {
+     "sku": "SKU-4176-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4176-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4176-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4177,
+   "customer": "customer_27",
+   "status": "processing",
+   "total_usd": 41.0,
+   "items": [
+    {
+     "sku": "SKU-4177-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4177-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4177-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4178,
+   "customer": "customer_28",
+   "status": "delivered",
+   "total_usd": 44.5,
+   "items": [
+    {
+     "sku": "SKU-4178-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4178-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4178-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4179,
+   "customer": "customer_29",
+   "status": "cancelled",
+   "total_usd": 48.0,
+   "items": [
+    {
+     "sku": "SKU-4179-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4179-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4179-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4180,
+   "customer": "customer_30",
+   "status": "shipped",
+   "total_usd": 51.5,
+   "items": [
+    {
+     "sku": "SKU-4180-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4180-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4180-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4181,
+   "customer": "customer_31",
+   "status": "processing",
+   "total_usd": 55.0,
+   "items": [
+    {
+     "sku": "SKU-4181-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4181-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4181-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4182,
+   "customer": "customer_32",
+   "status": "delivered",
+   "total_usd": 58.5,
+   "items": [
+    {
+     "sku": "SKU-4182-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4182-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4182-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4183,
+   "customer": "customer_33",
+   "status": "cancelled",
+   "total_usd": 62.0,
+   "items": [
+    {
+     "sku": "SKU-4183-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4183-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4183-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4184,
+   "customer": "customer_34",
+   "status": "shipped",
+   "total_usd": 65.5,
+   "items": [
+    {
+     "sku": "SKU-4184-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4184-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4184-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4185,
+   "customer": "customer_35",
+   "status": "processing",
+   "total_usd": 69.0,
+   "items": [
+    {
+     "sku": "SKU-4185-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4185-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4185-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4186,
+   "customer": "customer_36",
+   "status": "delivered",
+   "total_usd": 72.5,
+   "items": [
+    {
+     "sku": "SKU-4186-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4186-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4186-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4187,
+   "customer": "customer_37",
+   "status": "cancelled",
+   "total_usd": 76.0,
+   "items": [
+    {
+     "sku": "SKU-4187-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4187-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4187-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4188,
+   "customer": "customer_38",
+   "status": "shipped",
+   "total_usd": 79.5,
+   "items": [
+    {
+     "sku": "SKU-4188-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4188-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4188-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4189,
+   "customer": "customer_39",
+   "status": "processing",
+   "total_usd": 83.0,
+   "items": [
+    {
+     "sku": "SKU-4189-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4189-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4189-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4190,
+   "customer": "customer_40",
+   "status": "delivered",
+   "total_usd": 86.5,
+   "items": [
+    {
+     "sku": "SKU-4190-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4190-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4190-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4191,
+   "customer": "customer_41",
+   "status": "cancelled",
+   "total_usd": 90.0,
+   "items": [
+    {
+     "sku": "SKU-4191-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4191-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4191-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4192,
+   "customer": "customer_42",
+   "status": "shipped",
+   "total_usd": 93.5,
+   "items": [
+    {
+     "sku": "SKU-4192-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4192-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4192-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4193,
+   "customer": "customer_43",
+   "status": "processing",
+   "total_usd": 97.0,
+   "items": [
+    {
+     "sku": "SKU-4193-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4193-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4193-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4194,
+   "customer": "customer_44",
+   "status": "delivered",
+   "total_usd": 100.5,
+   "items": [
+    {
+     "sku": "SKU-4194-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4194-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4194-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4195,
+   "customer": "customer_45",
+   "status": "cancelled",
+   "total_usd": 104.0,
+   "items": [
+    {
+     "sku": "SKU-4195-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4195-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4195-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4196,
+   "customer": "customer_46",
+   "status": "shipped",
+   "total_usd": 107.5,
+   "items": [
+    {
+     "sku": "SKU-4196-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4196-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4196-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4197,
+   "customer": "customer_47",
+   "status": "processing",
+   "total_usd": 111.0,
+   "items": [
+    {
+     "sku": "SKU-4197-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4197-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4197-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4198,
+   "customer": "customer_48",
+   "status": "delivered",
+   "total_usd": 114.5,
+   "items": [
+    {
+     "sku": "SKU-4198-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4198-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4198-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4199,
+   "customer": "customer_49",
+   "status": "cancelled",
+   "total_usd": 118.0,
+   "items": [
+    {
+     "sku": "SKU-4199-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4199-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4199-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4200,
+   "customer": "customer_0",
+   "status": "shipped",
+   "total_usd": 121.5,
+   "items": [
+    {
+     "sku": "SKU-4200-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4200-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4200-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4201,
+   "customer": "customer_1",
+   "status": "processing",
+   "total_usd": 125.0,
+   "items": [
+    {
+     "sku": "SKU-4201-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4201-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4201-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4202,
+   "customer": "customer_2",
+   "status": "delivered",
+   "total_usd": 128.5,
+   "items": [
+    {
+     "sku": "SKU-4202-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4202-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4202-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4203,
+   "customer": "customer_3",
+   "status": "cancelled",
+   "total_usd": 132.0,
+   "items": [
+    {
+     "sku": "SKU-4203-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4203-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4203-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4204,
+   "customer": "customer_4",
+   "status": "shipped",
+   "total_usd": 135.5,
+   "items": [
+    {
+     "sku": "SKU-4204-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4204-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4204-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4205,
+   "customer": "customer_5",
+   "status": "processing",
+   "total_usd": 139.0,
+   "items": [
+    {
+     "sku": "SKU-4205-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4205-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4205-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4206,
+   "customer": "customer_6",
+   "status": "delivered",
+   "total_usd": 142.5,
+   "items": [
+    {
+     "sku": "SKU-4206-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4206-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4206-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4207,
+   "customer": "customer_7",
+   "status": "cancelled",
+   "total_usd": 146.0,
+   "items": [
+    {
+     "sku": "SKU-4207-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4207-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4207-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4208,
+   "customer": "customer_8",
+   "status": "shipped",
+   "total_usd": 149.5,
+   "items": [
+    {
+     "sku": "SKU-4208-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4208-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4208-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4209,
+   "customer": "customer_9",
+   "status": "processing",
+   "total_usd": 153.0,
+   "items": [
+    {
+     "sku": "SKU-4209-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4209-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4209-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4210,
+   "customer": "customer_10",
+   "status": "delivered",
+   "total_usd": 156.5,
+   "items": [
+    {
+     "sku": "SKU-4210-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4210-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4210-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4211,
+   "customer": "customer_11",
+   "status": "cancelled",
+   "total_usd": 160.0,
+   "items": [
+    {
+     "sku": "SKU-4211-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4211-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4211-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4212,
+   "customer": "customer_12",
+   "status": "shipped",
+   "total_usd": 163.5,
+   "items": [
+    {
+     "sku": "SKU-4212-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4212-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4212-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4213,
+   "customer": "customer_13",
+   "status": "processing",
+   "total_usd": 167.0,
+   "items": [
+    {
+     "sku": "SKU-4213-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4213-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4213-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4214,
+   "customer": "customer_14",
+   "status": "delivered",
+   "total_usd": 170.5,
+   "items": [
+    {
+     "sku": "SKU-4214-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4214-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4214-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4215,
+   "customer": "customer_15",
+   "status": "cancelled",
+   "total_usd": 174.0,
+   "items": [
+    {
+     "sku": "SKU-4215-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4215-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4215-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4216,
+   "customer": "customer_16",
+   "status": "shipped",
+   "total_usd": 177.5,
+   "items": [
+    {
+     "sku": "SKU-4216-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4216-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4216-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4217,
+   "customer": "customer_17",
+   "status": "refunded",
+   "total_usd": 181.0,
+   "items": [
+    {
+     "sku": "SKU-4217-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4217-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4217-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4218,
+   "customer": "customer_18",
+   "status": "delivered",
+   "total_usd": 184.5,
+   "items": [
+    {
+     "sku": "SKU-4218-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4218-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4218-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4219,
+   "customer": "customer_19",
+   "status": "cancelled",
+   "total_usd": 188.0,
+   "items": [
+    {
+     "sku": "SKU-4219-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4219-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4219-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4220,
+   "customer": "customer_20",
+   "status": "shipped",
+   "total_usd": 191.5,
+   "items": [
+    {
+     "sku": "SKU-4220-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4220-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4220-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4221,
+   "customer": "customer_21",
+   "status": "processing",
+   "total_usd": 195.0,
+   "items": [
+    {
+     "sku": "SKU-4221-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4221-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4221-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4222,
+   "customer": "customer_22",
+   "status": "delivered",
+   "total_usd": 198.5,
+   "items": [
+    {
+     "sku": "SKU-4222-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4222-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4222-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4223,
+   "customer": "customer_23",
+   "status": "cancelled",
+   "total_usd": 202.0,
+   "items": [
+    {
+     "sku": "SKU-4223-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4223-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4223-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4224,
+   "customer": "customer_24",
+   "status": "shipped",
+   "total_usd": 205.5,
+   "items": [
+    {
+     "sku": "SKU-4224-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4224-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4224-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4225,
+   "customer": "customer_25",
+   "status": "processing",
+   "total_usd": 209.0,
+   "items": [
+    {
+     "sku": "SKU-4225-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4225-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4225-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4226,
+   "customer": "customer_26",
+   "status": "delivered",
+   "total_usd": 212.5,
+   "items": [
+    {
+     "sku": "SKU-4226-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4226-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4226-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4227,
+   "customer": "customer_27",
+   "status": "cancelled",
+   "total_usd": 216.0,
+   "items": [
+    {
+     "sku": "SKU-4227-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4227-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4227-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4228,
+   "customer": "customer_28",
+   "status": "shipped",
+   "total_usd": 219.5,
+   "items": [
+    {
+     "sku": "SKU-4228-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4228-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4228-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4229,
+   "customer": "customer_29",
+   "status": "processing",
+   "total_usd": 223.0,
+   "items": [
+    {
+     "sku": "SKU-4229-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4229-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4229-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4230,
+   "customer": "customer_30",
+   "status": "delivered",
+   "total_usd": 226.5,
+   "items": [
+    {
+     "sku": "SKU-4230-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4230-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4230-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4231,
+   "customer": "customer_31",
+   "status": "cancelled",
+   "total_usd": 230.0,
+   "items": [
+    {
+     "sku": "SKU-4231-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4231-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4231-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4232,
+   "customer": "customer_32",
+   "status": "shipped",
+   "total_usd": 233.5,
+   "items": [
+    {
+     "sku": "SKU-4232-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4232-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4232-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4233,
+   "customer": "customer_33",
+   "status": "processing",
+   "total_usd": 237.0,
+   "items": [
+    {
+     "sku": "SKU-4233-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4233-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4233-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4234,
+   "customer": "customer_34",
+   "status": "delivered",
+   "total_usd": 240.5,
+   "items": [
+    {
+     "sku": "SKU-4234-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4234-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4234-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4235,
+   "customer": "customer_35",
+   "status": "cancelled",
+   "total_usd": 244.0,
+   "items": [
+    {
+     "sku": "SKU-4235-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4235-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4235-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4236,
+   "customer": "customer_36",
+   "status": "shipped",
+   "total_usd": 247.5,
+   "items": [
+    {
+     "sku": "SKU-4236-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4236-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4236-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4237,
+   "customer": "customer_37",
+   "status": "processing",
+   "total_usd": 251.0,
+   "items": [
+    {
+     "sku": "SKU-4237-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4237-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4237-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4238,
+   "customer": "customer_38",
+   "status": "delivered",
+   "total_usd": 254.5,
+   "items": [
+    {
+     "sku": "SKU-4238-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4238-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4238-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4239,
+   "customer": "customer_39",
+   "status": "cancelled",
+   "total_usd": 258.0,
+   "items": [
+    {
+     "sku": "SKU-4239-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4239-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4239-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4240,
+   "customer": "customer_40",
+   "status": "shipped",
+   "total_usd": 261.5,
+   "items": [
+    {
+     "sku": "SKU-4240-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4240-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4240-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4241,
+   "customer": "customer_41",
+   "status": "processing",
+   "total_usd": 265.0,
+   "items": [
+    {
+     "sku": "SKU-4241-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4241-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4241-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4242,
+   "customer": "customer_42",
+   "status": "delivered",
+   "total_usd": 268.5,
+   "items": [
+    {
+     "sku": "SKU-4242-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4242-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4242-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4243,
+   "customer": "customer_43",
+   "status": "cancelled",
+   "total_usd": 272.0,
+   "items": [
+    {
+     "sku": "SKU-4243-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4243-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4243-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4244,
+   "customer": "customer_44",
+   "status": "shipped",
+   "total_usd": 275.5,
+   "items": [
+    {
+     "sku": "SKU-4244-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4244-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4244-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4245,
+   "customer": "customer_45",
+   "status": "processing",
+   "total_usd": 279.0,
+   "items": [
+    {
+     "sku": "SKU-4245-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4245-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4245-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4246,
+   "customer": "customer_46",
+   "status": "delivered",
+   "total_usd": 282.5,
+   "items": [
+    {
+     "sku": "SKU-4246-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4246-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4246-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4247,
+   "customer": "customer_47",
+   "status": "cancelled",
+   "total_usd": 286.0,
+   "items": [
+    {
+     "sku": "SKU-4247-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4247-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4247-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4248,
+   "customer": "customer_48",
+   "status": "shipped",
+   "total_usd": 289.5,
+   "items": [
+    {
+     "sku": "SKU-4248-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4248-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4248-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4249,
+   "customer": "customer_49",
+   "status": "processing",
+   "total_usd": 293.0,
+   "items": [
+    {
+     "sku": "SKU-4249-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4249-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4249-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4250,
+   "customer": "customer_0",
+   "status": "delivered",
+   "total_usd": 296.5,
+   "items": [
+    {
+     "sku": "SKU-4250-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4250-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4250-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4251,
+   "customer": "customer_1",
+   "status": "cancelled",
+   "total_usd": 300.0,
+   "items": [
+    {
+     "sku": "SKU-4251-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4251-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4251-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4252,
+   "customer": "customer_2",
+   "status": "shipped",
+   "total_usd": 303.5,
+   "items": [
+    {
+     "sku": "SKU-4252-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4252-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4252-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4253,
+   "customer": "customer_3",
+   "status": "processing",
+   "total_usd": 307.0,
+   "items": [
+    {
+     "sku": "SKU-4253-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4253-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4253-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4254,
+   "customer": "customer_4",
+   "status": "delivered",
+   "total_usd": 310.5,
+   "items": [
+    {
+     "sku": "SKU-4254-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4254-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4254-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4255,
+   "customer": "customer_5",
+   "status": "cancelled",
+   "total_usd": 314.0,
+   "items": [
+    {
+     "sku": "SKU-4255-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4255-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4255-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4256,
+   "customer": "customer_6",
+   "status": "shipped",
+   "total_usd": 317.5,
+   "items": [
+    {
+     "sku": "SKU-4256-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4256-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4256-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4257,
+   "customer": "customer_7",
+   "status": "processing",
+   "total_usd": 321.0,
+   "items": [
+    {
+     "sku": "SKU-4257-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4257-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4257-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4258,
+   "customer": "customer_8",
+   "status": "delivered",
+   "total_usd": 324.5,
+   "items": [
+    {
+     "sku": "SKU-4258-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4258-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4258-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4259,
+   "customer": "customer_9",
+   "status": "cancelled",
+   "total_usd": 328.0,
+   "items": [
+    {
+     "sku": "SKU-4259-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4259-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4259-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4260,
+   "customer": "customer_10",
+   "status": "shipped",
+   "total_usd": 331.5,
+   "items": [
+    {
+     "sku": "SKU-4260-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4260-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4260-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4261,
+   "customer": "customer_11",
+   "status": "processing",
+   "total_usd": 335.0,
+   "items": [
+    {
+     "sku": "SKU-4261-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4261-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4261-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4262,
+   "customer": "customer_12",
+   "status": "delivered",
+   "total_usd": 338.5,
+   "items": [
+    {
+     "sku": "SKU-4262-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4262-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4262-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4263,
+   "customer": "customer_13",
+   "status": "cancelled",
+   "total_usd": 342.0,
+   "items": [
+    {
+     "sku": "SKU-4263-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4263-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4263-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4264,
+   "customer": "customer_14",
+   "status": "shipped",
+   "total_usd": 345.5,
+   "items": [
+    {
+     "sku": "SKU-4264-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4264-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4264-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4265,
+   "customer": "customer_15",
+   "status": "processing",
+   "total_usd": 349.0,
+   "items": [
+    {
+     "sku": "SKU-4265-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4265-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4265-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4266,
+   "customer": "customer_16",
+   "status": "delivered",
+   "total_usd": 352.5,
+   "items": [
+    {
+     "sku": "SKU-4266-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4266-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4266-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4267,
+   "customer": "customer_17",
+   "status": "cancelled",
+   "total_usd": 356.0,
+   "items": [
+    {
+     "sku": "SKU-4267-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4267-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4267-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4268,
+   "customer": "customer_18",
+   "status": "shipped",
+   "total_usd": 20.0,
+   "items": [
+    {
+     "sku": "SKU-4268-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4268-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4268-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4269,
+   "customer": "customer_19",
+   "status": "processing",
+   "total_usd": 23.5,
+   "items": [
+    {
+     "sku": "SKU-4269-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4269-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4269-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4270,
+   "customer": "customer_20",
+   "status": "delivered",
+   "total_usd": 27.0,
+   "items": [
+    {
+     "sku": "SKU-4270-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4270-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4270-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4271,
+   "customer": "customer_21",
+   "status": "cancelled",
+   "total_usd": 30.5,
+   "items": [
+    {
+     "sku": "SKU-4271-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4271-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4271-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4272,
+   "customer": "customer_22",
+   "status": "shipped",
+   "total_usd": 34.0,
+   "items": [
+    {
+     "sku": "SKU-4272-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4272-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4272-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4273,
+   "customer": "customer_23",
+   "status": "processing",
+   "total_usd": 37.5,
+   "items": [
+    {
+     "sku": "SKU-4273-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4273-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4273-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4274,
+   "customer": "customer_24",
+   "status": "delivered",
+   "total_usd": 41.0,
+   "items": [
+    {
+     "sku": "SKU-4274-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4274-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4274-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4275,
+   "customer": "customer_25",
+   "status": "cancelled",
+   "total_usd": 44.5,
+   "items": [
+    {
+     "sku": "SKU-4275-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4275-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4275-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4276,
+   "customer": "customer_26",
+   "status": "shipped",
+   "total_usd": 48.0,
+   "items": [
+    {
+     "sku": "SKU-4276-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4276-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4276-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4277,
+   "customer": "customer_27",
+   "status": "processing",
+   "total_usd": 51.5,
+   "items": [
+    {
+     "sku": "SKU-4277-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4277-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4277-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4278,
+   "customer": "customer_28",
+   "status": "delivered",
+   "total_usd": 55.0,
+   "items": [
+    {
+     "sku": "SKU-4278-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4278-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4278-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4279,
+   "customer": "customer_29",
+   "status": "cancelled",
+   "total_usd": 58.5,
+   "items": [
+    {
+     "sku": "SKU-4279-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4279-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4279-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4280,
+   "customer": "customer_30",
+   "status": "shipped",
+   "total_usd": 62.0,
+   "items": [
+    {
+     "sku": "SKU-4280-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4280-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4280-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4281,
+   "customer": "customer_31",
+   "status": "processing",
+   "total_usd": 65.5,
+   "items": [
+    {
+     "sku": "SKU-4281-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4281-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4281-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4282,
+   "customer": "customer_32",
+   "status": "delivered",
+   "total_usd": 69.0,
+   "items": [
+    {
+     "sku": "SKU-4282-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4282-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4282-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4283,
+   "customer": "customer_33",
+   "status": "cancelled",
+   "total_usd": 72.5,
+   "items": [
+    {
+     "sku": "SKU-4283-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4283-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4283-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4284,
+   "customer": "customer_34",
+   "status": "shipped",
+   "total_usd": 76.0,
+   "items": [
+    {
+     "sku": "SKU-4284-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4284-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4284-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4285,
+   "customer": "customer_35",
+   "status": "processing",
+   "total_usd": 79.5,
+   "items": [
+    {
+     "sku": "SKU-4285-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4285-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4285-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4286,
+   "customer": "customer_36",
+   "status": "delivered",
+   "total_usd": 83.0,
+   "items": [
+    {
+     "sku": "SKU-4286-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4286-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4286-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4287,
+   "customer": "customer_37",
+   "status": "cancelled",
+   "total_usd": 86.5,
+   "items": [
+    {
+     "sku": "SKU-4287-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4287-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4287-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4288,
+   "customer": "customer_38",
+   "status": "shipped",
+   "total_usd": 90.0,
+   "items": [
+    {
+     "sku": "SKU-4288-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4288-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4288-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4289,
+   "customer": "customer_39",
+   "status": "processing",
+   "total_usd": 93.5,
+   "items": [
+    {
+     "sku": "SKU-4289-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4289-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4289-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4290,
+   "customer": "customer_40",
+   "status": "delivered",
+   "total_usd": 97.0,
+   "items": [
+    {
+     "sku": "SKU-4290-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4290-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4290-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4291,
+   "customer": "customer_41",
+   "status": "cancelled",
+   "total_usd": 100.5,
+   "items": [
+    {
+     "sku": "SKU-4291-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4291-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4291-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4292,
+   "customer": "customer_42",
+   "status": "shipped",
+   "total_usd": 104.0,
+   "items": [
+    {
+     "sku": "SKU-4292-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4292-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4292-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4293,
+   "customer": "customer_43",
+   "status": "processing",
+   "total_usd": 107.5,
+   "items": [
+    {
+     "sku": "SKU-4293-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4293-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4293-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4294,
+   "customer": "customer_44",
+   "status": "delivered",
+   "total_usd": 111.0,
+   "items": [
+    {
+     "sku": "SKU-4294-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4294-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4294-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4295,
+   "customer": "customer_45",
+   "status": "cancelled",
+   "total_usd": 114.5,
+   "items": [
+    {
+     "sku": "SKU-4295-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4295-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4295-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4296,
+   "customer": "customer_46",
+   "status": "shipped",
+   "total_usd": 118.0,
+   "items": [
+    {
+     "sku": "SKU-4296-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4296-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4296-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4297,
+   "customer": "customer_47",
+   "status": "processing",
+   "total_usd": 121.5,
+   "items": [
+    {
+     "sku": "SKU-4297-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4297-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4297-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4298,
+   "customer": "customer_48",
+   "status": "delivered",
+   "total_usd": 125.0,
+   "items": [
+    {
+     "sku": "SKU-4298-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4298-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4298-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4299,
+   "customer": "customer_49",
+   "status": "cancelled",
+   "total_usd": 128.5,
+   "items": [
+    {
+     "sku": "SKU-4299-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4299-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4299-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4300,
+   "customer": "customer_0",
+   "status": "shipped",
+   "total_usd": 132.0,
+   "items": [
+    {
+     "sku": "SKU-4300-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4300-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4300-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4301,
+   "customer": "customer_1",
+   "status": "processing",
+   "total_usd": 135.5,
+   "items": [
+    {
+     "sku": "SKU-4301-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4301-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4301-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4302,
+   "customer": "customer_2",
+   "status": "delivered",
+   "total_usd": 139.0,
+   "items": [
+    {
+     "sku": "SKU-4302-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4302-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4302-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4303,
+   "customer": "customer_3",
+   "status": "cancelled",
+   "total_usd": 142.5,
+   "items": [
+    {
+     "sku": "SKU-4303-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4303-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4303-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4304,
+   "customer": "customer_4",
+   "status": "shipped",
+   "total_usd": 146.0,
+   "items": [
+    {
+     "sku": "SKU-4304-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4304-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4304-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4305,
+   "customer": "customer_5",
+   "status": "processing",
+   "total_usd": 149.5,
+   "items": [
+    {
+     "sku": "SKU-4305-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4305-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4305-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4306,
+   "customer": "customer_6",
+   "status": "delivered",
+   "total_usd": 153.0,
+   "items": [
+    {
+     "sku": "SKU-4306-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4306-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4306-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4307,
+   "customer": "customer_7",
+   "status": "cancelled",
+   "total_usd": 156.5,
+   "items": [
+    {
+     "sku": "SKU-4307-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4307-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4307-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4308,
+   "customer": "customer_8",
+   "status": "shipped",
+   "total_usd": 160.0,
+   "items": [
+    {
+     "sku": "SKU-4308-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4308-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4308-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4309,
+   "customer": "customer_9",
+   "status": "processing",
+   "total_usd": 163.5,
+   "items": [
+    {
+     "sku": "SKU-4309-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4309-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4309-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4310,
+   "customer": "customer_10",
+   "status": "delivered",
+   "total_usd": 167.0,
+   "items": [
+    {
+     "sku": "SKU-4310-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4310-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4310-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4311,
+   "customer": "customer_11",
+   "status": "cancelled",
+   "total_usd": 170.5,
+   "items": [
+    {
+     "sku": "SKU-4311-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4311-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4311-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4312,
+   "customer": "customer_12",
+   "status": "shipped",
+   "total_usd": 174.0,
+   "items": [
+    {
+     "sku": "SKU-4312-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4312-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4312-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4313,
+   "customer": "customer_13",
+   "status": "processing",
+   "total_usd": 177.5,
+   "items": [
+    {
+     "sku": "SKU-4313-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4313-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4313-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4314,
+   "customer": "customer_14",
+   "status": "delivered",
+   "total_usd": 181.0,
+   "items": [
+    {
+     "sku": "SKU-4314-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4314-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4314-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4315,
+   "customer": "customer_15",
+   "status": "cancelled",
+   "total_usd": 184.5,
+   "items": [
+    {
+     "sku": "SKU-4315-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4315-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4315-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4316,
+   "customer": "customer_16",
+   "status": "shipped",
+   "total_usd": 188.0,
+   "items": [
+    {
+     "sku": "SKU-4316-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4316-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4316-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4317,
+   "customer": "customer_17",
+   "status": "processing",
+   "total_usd": 191.5,
+   "items": [
+    {
+     "sku": "SKU-4317-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4317-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4317-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4318,
+   "customer": "customer_18",
+   "status": "delivered",
+   "total_usd": 195.0,
+   "items": [
+    {
+     "sku": "SKU-4318-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4318-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4318-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  },
+  {
+   "order_id": 4319,
+   "customer": "customer_19",
+   "status": "cancelled",
+   "total_usd": 198.5,
+   "items": [
+    {
+     "sku": "SKU-4319-0",
+     "qty": 1
+    },
+    {
+     "sku": "SKU-4319-1",
+     "qty": 2
+    },
+    {
+     "sku": "SKU-4319-2",
+     "qty": 3
+    }
+   ],
+   "notes": "standard fulfillment path, no special handling required"
+  }
+ ],
+ "generated": "2026-06-30",
+ "warehouse": "EU-CENTRAL"
+}

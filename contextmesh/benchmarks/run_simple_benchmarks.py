@@ -191,10 +191,10 @@ def run_benchmark() -> dict:
     )
 
     from contextmesh.core.chunker.code_chunker import CodeChunker
+    from contextmesh.core.chunker.csv_chunker import CSVChunker
+    from contextmesh.core.chunker.html_chunker import HTMLChunker
     from contextmesh.core.chunker.json_chunker import JSONChunker
     from contextmesh.core.chunker.log_chunker import LogChunker
-    from contextmesh.core.chunker.html_chunker import HTMLChunker
-    from contextmesh.core.chunker.csv_chunker import CSVChunker
     from contextmesh.core.chunker.shell_chunker import ShellChunker
     from contextmesh.core.tokenizer import TokenCounter
 

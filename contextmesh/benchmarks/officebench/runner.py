@@ -50,7 +50,7 @@ def load_officebench_tasks(
             )
 
     if not tasks:
-        logger.info(f"No task files found, generating synthetic tasks")
+        logger.info("No task files found, generating synthetic tasks")
         for i in range(task_count):
             tasks.append(
                 Task(

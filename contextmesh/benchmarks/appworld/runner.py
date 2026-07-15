@@ -19,7 +19,6 @@ import sys
 from pathlib import Path
 
 from contextmesh.benchmarks.eval_harness.base import (
-    BenchmarkResults,
     EvalHarness,
     Task,
 )
